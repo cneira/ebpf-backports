@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-top</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-top</refname>
+  <refpurpose>System profiling tool.</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf top</emphasis> [-e &lt;EVENT&gt; | --event=EVENT] [&lt;options&gt;]</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>This command generates and displays a performance counter profile in real time.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-a
+</term>
+<term>
+--all-cpus
+</term>
+<listitem>
+<simpara>
+        System-wide collection.  (default)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-c &lt;count&gt;
+</term>
+<term>
+--count=&lt;count&gt;
+</term>
+<listitem>
+<simpara>
+        Event period to sample.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-C &lt;cpu-list&gt;
+</term>
+<term>
+--cpu=&lt;cpu&gt;
+</term>
+<listitem>
+<simpara>
+Monitor only on the list of CPUs provided. Multiple CPUs can be provided as a
+comma-separated list with no space: 0,1. Ranges of CPUs are specified with -: 0-2.
+Default is to monitor all CPUS.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-d &lt;seconds&gt;
+</term>
+<term>
+--delay=&lt;seconds&gt;
+</term>
+<listitem>
+<simpara>
+        Number of seconds to delay between refreshes.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-e &lt;event&gt;
+</term>
+<term>
+--event=&lt;event&gt;
+</term>
+<listitem>
+<simpara>
+        Select the PMU event. Selection can be a symbolic event name
+        (use <emphasis>perf list</emphasis> to list all events) or a raw PMU
+        event (eventsel+umask) in the form of rNNN where NNN is a
+        hexadecimal event descriptor.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-E &lt;entries&gt;
+</term>
+<term>
+--entries=&lt;entries&gt;
+</term>
+<listitem>
+<simpara>
+        Display this many functions.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-f &lt;count&gt;
+</term>
+<term>
+--count-filter=&lt;count&gt;
+</term>
+<listitem>
+<simpara>
+        Only display functions with more events than this.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--group
+</term>
+<listitem>
+<simpara>
+        Put the counters into a counter group.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-F &lt;freq&gt;
+</term>
+<term>
+--freq=&lt;freq&gt;
+</term>
+<listitem>
+<simpara>
+        Profile at this frequency.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-i
+</term>
+<term>
+--inherit
+</term>
+<listitem>
+<simpara>
+        Child tasks do not inherit counters.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-k &lt;path&gt;
+</term>
+<term>
+--vmlinux=&lt;path&gt;
+</term>
+<listitem>
+<simpara>
+        Path to vmlinux.  Required for annotation functionality.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-m &lt;pages&gt;
+</term>
+<term>
+--mmap-pages=&lt;pages&gt;
+</term>
+<listitem>
+<simpara>
+        Number of mmap data pages (must be a power of two) or size
+        specification with appended unit character - B/K/M/G. The
+        size is rounded up to have nearest pages power of two value.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-p &lt;pid&gt;
+</term>
+<term>
+--pid=&lt;pid&gt;
+</term>
+<listitem>
+<simpara>
+        Profile events on existing Process ID (comma separated list).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-t &lt;tid&gt;
+</term>
+<term>
+--tid=&lt;tid&gt;
+</term>
+<listitem>
+<simpara>
+        Profile events on existing thread ID (comma separated list).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-u
+</term>
+<term>
+--uid=
+</term>
+<listitem>
+<simpara>
+        Record events in threads owned by uid. Name or number.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-r &lt;priority&gt;
+</term>
+<term>
+--realtime=&lt;priority&gt;
+</term>
+<listitem>
+<simpara>
+        Collect data with this RT SCHED_FIFO priority.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--sym-annotate=&lt;symbol&gt;
+</term>
+<listitem>
+<simpara>
+        Annotate this symbol.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-K
+</term>
+<term>
+--hide_kernel_symbols
+</term>
+<listitem>
+<simpara>
+        Hide kernel symbols.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-U
+</term>
+<term>
+--hide_user_symbols
+</term>
+<listitem>
+<simpara>
+        Hide user symbols.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--demangle-kernel
+</term>
+<listitem>
+<simpara>
+        Demangle kernel symbols.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-D
+</term>
+<term>
+--dump-symtab
+</term>
+<listitem>
+<simpara>
+        Dump the symbol table used for profiling.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose (show counter open errors, etc).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-z
+</term>
+<term>
+--zero
+</term>
+<listitem>
+<simpara>
+        Zero history across display updates.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-s
+</term>
+<term>
+--sort
+</term>
+<listitem>
+<simpara>
+        Sort by key(s): pid, comm, dso, symbol, parent, srcline, weight,
+        local_weight, abort, in_tx, transaction, overhead, sample, period.
+        Please see description of --sort in the perf-report man page.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--fields=
+</term>
+<listitem>
+<simpara>
+        Specify output field - multiple keys can be specified in CSV format.
+        Following fields are available:
+        overhead, overhead_sys, overhead_us, overhead_children, sample and period.
+        Also it can contain any sort key(s).
+</simpara>
+<literallayout class="monospaced">By default, every sort keys not specified in --field will be appended
+automatically.</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-n
+</term>
+<term>
+--show-nr-samples
+</term>
+<listitem>
+<simpara>
+        Show a column with the number of samples.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--show-total-period
+</term>
+<listitem>
+<simpara>
+        Show a column with the sum of periods.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--dsos
+</term>
+<listitem>
+<simpara>
+        Only consider symbols in these dsos.  This option will affect the
+        percentage of the overhead column.  See --percentage for more info.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--comms
+</term>
+<listitem>
+<simpara>
+        Only consider symbols in these comms.  This option will affect the
+        percentage of the overhead column.  See --percentage for more info.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--symbols
+</term>
+<listitem>
+<simpara>
+        Only consider these symbols.  This option will affect the
+        percentage of the overhead column.  See --percentage for more info.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-M
+</term>
+<term>
+--disassembler-style=
+</term>
+<listitem>
+<simpara>
+Set disassembler style for objdump.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--source
+</term>
+<listitem>
+<simpara>
+        Interleave source code with assembly code. Enabled by default,
+        disable with --no-source.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--asm-raw
+</term>
+<listitem>
+<simpara>
+        Show raw instruction encoding of assembly instructions.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-g
+</term>
+<listitem>
+<simpara>
+        Enables call-graph (stack chain/backtrace) recording.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--call-graph [mode,type,min[,limit],order[,key][,branch]]
+</term>
+<listitem>
+<simpara>
+        Setup and enable call-graph (stack chain/backtrace) recording,
+        implies -g.  See <literal>--call-graph</literal> section in perf-record and
+        perf-report man pages for details.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--children
+</term>
+<listitem>
+<simpara>
+        Accumulate callchain of children to parent entry so that then can
+        show up in the output.  The output will have a new "Children" column
+        and will be sorted on the data.  It requires -g/--call-graph option
+        enabled.  See the &#8216;overhead calculation&#8217; section for more details.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--max-stack
+</term>
+<listitem>
+<simpara>
+        Set the stack depth limit when parsing the callchain, anything
+        beyond the specified depth will be ignored. This is a trade-off
+        between information loss and faster processing especially for
+        workloads that can have a very long callchain stack.
+</simpara>
+<literallayout class="monospaced">Default: 127</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--ignore-callees=&lt;regex&gt;
+</term>
+<listitem>
+<simpara>
+        Ignore callees of the function(s) matching the given regex.
+        This has the effect of collecting the callers of each such
+        function into one place in the call-graph tree.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--percent-limit
+</term>
+<listitem>
+<simpara>
+        Do not show entries which have an overhead under that percent.
+        (Default: 0).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--percentage
+</term>
+<listitem>
+<simpara>
+        Determine how to display the overhead percentage of filtered entries.
+        Filters can be applied by --comms, --dsos and/or --symbols options and
+        Zoom operations on the TUI (thread, dso, etc).
+</simpara>
+<literallayout class="monospaced">"relative" means it's relative to filtered entries only so that the
+sum of shown entries will be always 100%. "absolute" means it retains
+the original value before and after the filter is applied.</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-w
+</term>
+<term>
+--column-widths=&lt;width[,width&#8230;]&gt;
+</term>
+<listitem>
+<simpara>
+        Force each column width to the provided list, for large terminal
+        readability.  0 means no limit (default behavior).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--proc-map-timeout
+</term>
+<listitem>
+<simpara>
+        When processing pre-existing threads /proc/XXX/mmap, it may take
+        a long time, because the file may be huge. A time out is needed
+        in such cases.
+        This option sets the time out limit. The default value is 500 ms.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-b
+</term>
+<term>
+--branch-any
+</term>
+<listitem>
+<simpara>
+        Enable taken branch stack sampling. Any type of taken branch may be sampled.
+        This is a shortcut for --branch-filter any. See --branch-filter for more infos.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-j
+</term>
+<term>
+--branch-filter
+</term>
+<listitem>
+<simpara>
+        Enable taken branch stack sampling. Each sample captures a series of consecutive
+        taken branches. The number of branches captured with each sample depends on the
+        underlying hardware, the type of branches of interest, and the executed code.
+        It is possible to select the types of branches captured by enabling filters.
+        For a full list of modifiers please see the perf record manpage.
+</simpara>
+<literallayout class="monospaced">The option requires at least one branch type among any, any_call, any_ret, ind_call, cond.
+The privilege levels may be omitted, in which case, the privilege levels of the associated
+event are applied to the branch filter. Both kernel (k) and hypervisor (hv) privilege
+levels are subject to permissions.  When sampling on multiple events, branch stack sampling
+is enabled for all the sampling events. The sampled branch type is the same for all events.
+The various filters must be specified as a comma separated list: --branch-filter any_ret,u,k
+Note that this feature may not be available on all processors.</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--raw-trace
+</term>
+<listitem>
+<simpara>
+        When displaying traceevent output, do not use print fmt or plugins.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--hierarchy
+</term>
+<listitem>
+<simpara>
+        Enable hierarchy output.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_interactive_prompting_keys">
+<title>INTERACTIVE PROMPTING KEYS</title>
+<variablelist>
+<varlistentry>
+<term>
+[d]
+</term>
+<listitem>
+<simpara>
+        Display refresh delay.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+[e]
+</term>
+<listitem>
+<simpara>
+        Number of entries to display.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+[E]
+</term>
+<listitem>
+<simpara>
+        Event to display when multiple counters are active.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+[f]
+</term>
+<listitem>
+<simpara>
+        Profile display filter (&gt;= hit count).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+[F]
+</term>
+<listitem>
+<simpara>
+        Annotation display filter (&gt;= % of total).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+[s]
+</term>
+<listitem>
+<simpara>
+        Annotate symbol.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+[S]
+</term>
+<listitem>
+<simpara>
+        Stop annotation, return to full profile display.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+[z]
+</term>
+<listitem>
+<simpara>
+        Toggle event count zeroing across display updates.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+[qQ]
+</term>
+<listitem>
+<simpara>
+        Quit.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+<simpara>Pressing any unmapped key displays a menu, and prompts for input.</simpara>
+</refsect1>
+<refsect1 id="_overhead_calculation">
+<title>Overhead calculation</title>
+<simpara>The overhead can be shown in two columns as <emphasis>Children</emphasis> and <emphasis>Self</emphasis> when
+perf collects callchains.  The <emphasis>self</emphasis> overhead is simply calculated by
+adding all period values of the entry - usually a function (symbol).
+This is the value that perf shows traditionally and sum of all the
+<emphasis>self</emphasis> overhead values should be 100%.</simpara>
+<simpara>The <emphasis>children</emphasis> overhead is calculated by adding all period values of
+the child functions so that it can show the total overhead of the
+higher level functions even if they don&#8217;t directly execute much.
+<emphasis>Children</emphasis> here means functions that are called from another (parent)
+function.</simpara>
+<simpara>It might be confusing that the sum of all the <emphasis>children</emphasis> overhead
+values exceeds 100% since each of them is already an accumulation of
+<emphasis>self</emphasis> overhead of its child functions.  But with this enabled, users
+can find which function has the most overhead even if samples are
+spread over the children.</simpara>
+<simpara>Consider the following example; there are three functions like below.</simpara>
+<literallayout>
+&#10;.ft C&#10;void foo(void) {
+    /* do something */
+}
+
+void bar(void) {
+    /* do something */
+    foo();
+}
+
+int main(void) {
+    bar()
+    return 0;
+}&#10;.ft&#10;
+</literallayout>
+<simpara>In this case <emphasis>foo</emphasis> is a child of <emphasis>bar</emphasis>, and <emphasis>bar</emphasis> is an immediate
+child of <emphasis>main</emphasis> so <emphasis>foo</emphasis> also is a child of <emphasis>main</emphasis>.  In other words,
+<emphasis>main</emphasis> is a parent of <emphasis>foo</emphasis> and <emphasis>bar</emphasis>, and <emphasis>bar</emphasis> is a parent of <emphasis>foo</emphasis>.</simpara>
+<simpara>Suppose all samples are recorded in <emphasis>foo</emphasis> and <emphasis>bar</emphasis> only.  When it&#8217;s
+recorded with callchains the output will show something like below
+in the usual (self-overhead-only) output of perf report:</simpara>
+<literallayout>
+&#10;.ft C&#10;Overhead  Symbol
+........  .....................
+  60.00%  foo
+          |
+          --- foo
+              bar
+              main
+              __libc_start_main
+
+  40.00%  bar
+          |
+          --- bar
+              main
+              __libc_start_main&#10;.ft&#10;
+</literallayout>
+<simpara>When the --children option is enabled, the <emphasis>self</emphasis> overhead values of
+child functions (i.e. <emphasis>foo</emphasis> and <emphasis>bar</emphasis>) are added to the parents to
+calculate the <emphasis>children</emphasis> overhead.  In this case the report could be
+displayed as:</simpara>
+<literallayout>
+&#10;.ft C&#10;Children      Self  Symbol
+........  ........  ....................
+ 100.00%     0.00%  __libc_start_main
+          |
+          --- __libc_start_main
+
+ 100.00%     0.00%  main
+          |
+          --- main
+              __libc_start_main
+
+ 100.00%    40.00%  bar
+          |
+          --- bar
+              main
+              __libc_start_main
+
+  60.00%    60.00%  foo
+          |
+          --- foo
+              bar
+              main
+              __libc_start_main&#10;.ft&#10;
+</literallayout>
+<simpara>In the above output, the <emphasis>self</emphasis> overhead of <emphasis>foo</emphasis> (60%) was add to the
+<emphasis>children</emphasis> overhead of <emphasis>bar</emphasis>, <emphasis>main</emphasis> and <emphasis>__libc_start_main</emphasis>.
+Likewise, the <emphasis>self</emphasis> overhead of <emphasis>bar</emphasis> (40%) was added to the
+<emphasis>children</emphasis> overhead of <emphasis>main</emphasis> and <emphasis>\_\_libc_start_main</emphasis>.</simpara>
+<simpara>So <emphasis>\_\_libc_start_main</emphasis> and <emphasis>main</emphasis> are shown first since they have
+same (100%) <emphasis>children</emphasis> overhead (even though they have zero <emphasis>self</emphasis>
+overhead) and they are the parents of <emphasis>foo</emphasis> and <emphasis>bar</emphasis>.</simpara>
+<simpara>Since v3.16 the <emphasis>children</emphasis> overhead is shown by default and the output
+is sorted by its values. The <emphasis>children</emphasis> overhead is disabled by
+specifying --no-children option on the command line or by adding
+<emphasis>report.children = false</emphasis> or <emphasis>top.children = false</emphasis> in the perf config
+file.</simpara>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-stat</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-list</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-report</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-annotate</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-annotate</refname>
+  <refpurpose>Read perf.data (created by perf record) and display annotated code</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf annotate</emphasis> [-i &lt;file&gt; | --input=file] [symbol_name]</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>This command reads the input file and displays an annotated version of the
+code. If the object file has debug symbols then the source code will be
+displayed alongside assembly code.</simpara>
+<simpara>If there is no debug info in the object, then annotated assembly is displayed.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-i
+</term>
+<term>
+--input=
+</term>
+<listitem>
+<simpara>
+        Input file name. (default: perf.data unless stdin is a fifo)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-d
+</term>
+<term>
+--dsos=&lt;dso[,dso&#8230;]&gt;
+</term>
+<listitem>
+<simpara>
+        Only consider symbols in these dsos.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-s
+</term>
+<term>
+--symbol=&lt;symbol&gt;
+</term>
+<listitem>
+<simpara>
+        Symbol to annotate.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-f
+</term>
+<term>
+--force
+</term>
+<listitem>
+<simpara>
+        Don&#8217;t complain, do it.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose. (Show symbol address, etc)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-D
+</term>
+<term>
+--dump-raw-trace
+</term>
+<listitem>
+<simpara>
+        Dump raw trace in ASCII.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-k
+</term>
+<term>
+--vmlinux=&lt;file&gt;
+</term>
+<listitem>
+<simpara>
+        vmlinux pathname.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-m
+</term>
+<term>
+--modules
+</term>
+<listitem>
+<simpara>
+        Load module symbols. WARNING: use only with -k and LIVE kernel.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-l
+</term>
+<term>
+--print-line
+</term>
+<listitem>
+<simpara>
+        Print matching source lines (may be slow).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-P
+</term>
+<term>
+--full-paths
+</term>
+<listitem>
+<simpara>
+        Don&#8217;t shorten the displayed pathnames.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--stdio
+</term>
+<listitem>
+<simpara>
+Use the stdio interface.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--tui
+</term>
+<listitem>
+<simpara>
+Use the TUI interface. Use of --tui requires a tty, if one is not
+        present, as when piping to other commands, the stdio interface is
+        used. This interfaces starts by centering on the line with more
+        samples, TAB/UNTAB cycles through the lines with more samples.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--gtk
+</term>
+<listitem>
+<simpara>
+Use the GTK interface.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-C
+</term>
+<term>
+--cpu
+</term>
+<listitem>
+<simpara>
+Only report samples for the list of CPUs provided. Multiple CPUs can
+        be provided as a comma-separated list with no space: 0,1. Ranges of
+        CPUs are specified with -: 0-2. Default is to report samples on all
+        CPUs.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--asm-raw
+</term>
+<listitem>
+<simpara>
+        Show raw instruction encoding of assembly instructions.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--source
+</term>
+<listitem>
+<simpara>
+        Interleave source code with assembly code. Enabled by default,
+        disable with --no-source.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--symfs=&lt;directory&gt;
+</term>
+<listitem>
+<simpara>
+        Look for files with symbols relative to this directory.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-M
+</term>
+<term>
+--disassembler-style=
+</term>
+<listitem>
+<simpara>
+Set disassembler style for objdump.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--objdump=&lt;path&gt;
+</term>
+<listitem>
+<simpara>
+        Path to objdump binary.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--skip-missing
+</term>
+<listitem>
+<simpara>
+        Skip symbols that cannot be annotated.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--group
+</term>
+<listitem>
+<simpara>
+        Show event group information together
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-report</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

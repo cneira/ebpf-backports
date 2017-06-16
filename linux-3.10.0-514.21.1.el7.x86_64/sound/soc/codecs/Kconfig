@@ -1,0 +1,103 @@
+# Helper to resolve issues with configs that have SPI enabled but I2C
+# modular, meaning we can't build the codec driver in with I2C support.
+# We use an ordered list of conditional defaults to pick the appropriate
+# setting - SPI can't be modular so that case doesn't need to be covered.
+config SND_SOC_I2C_AND_SPI
+	tristate
+	default m if I2C=m
+	default y if I2C=y
+	default y if SPI_MASTER=y
+
+menu "CODEC drivers"
+
+config SND_SOC_ALL_CODECS
+	tristate "Build all ASoC CODEC drivers"
+	depends on COMPILE_TEST
+	select SND_SOC_DMIC
+	select SND_SOC_HDAC_HDMI
+	select SND_SOC_MAX98090 if I2C
+	select SND_SOC_MAX98357A if GPIOLIB
+	select SND_SOC_NAU8825 if I2C
+	select SND_SOC_RT5640 if I2C
+	select SND_SOC_RT5645 if I2C
+	select SND_SOC_RT5651 if I2C
+	select SND_SOC_RT5670 if I2C
+	select SND_SOC_SN95031 if INTEL_SCU_IPC
+	select SND_SOC_SSM4567 if I2C
+	select SND_SOC_TS3A227E if I2C
+        help
+          Normally ASoC codec drivers are only built if a machine driver which
+          uses them is also built since they are only usable with a machine
+          driver.  Selecting this option will allow these drivers to be built
+          without an explicit machine driver for test and development purposes.
+
+	  Support for the bus types used to access the codecs to be built must
+	  be selected separately.
+
+          If unsure select "N".
+
+config SND_SOC_DMIC
+	tristate
+
+config SND_SOC_HDAC_HDMI
+	tristate
+	select SND_HDA_EXT_CORE
+	select SND_PCM_ELD
+	select HDMI
+
+config SND_SOC_MAX98090
+       tristate
+
+config SND_SOC_MAX98357A
+       tristate
+
+config SND_SOC_RL6231
+	tristate
+	default y if SND_SOC_RT5640=y
+	default y if SND_SOC_RT5645=y
+	default y if SND_SOC_RT5651=y
+	default y if SND_SOC_RT5670=y
+	default m if SND_SOC_RT5640=m
+	default m if SND_SOC_RT5645=m
+	default m if SND_SOC_RT5651=m
+	default m if SND_SOC_RT5670=m
+
+config SND_SOC_RL6347A
+	tristate
+	default y if SND_SOC_RT286=y
+	default m if SND_SOC_RT286=m
+
+config SND_SOC_RT286
+	tristate
+	depends on I2C
+
+config SND_SOC_RT5640
+	tristate
+
+config SND_SOC_RT5645
+        tristate
+
+config SND_SOC_RT5651
+	tristate
+
+config SND_SOC_RT5670
+	tristate
+
+config SND_SOC_SN95031
+	tristate
+
+config SND_SOC_SSM2518
+	tristate
+
+config SND_SOC_SSM4567
+	tristate "Analog Devices ssm4567 amplifier driver support"
+	depends on I2C
+
+config SND_SOC_TS3A227E
+	tristate "TI Headset/Mic detect and keypress chip"
+	depends on I2C
+
+config SND_SOC_NAU8825
+	tristate
+
+endmenu

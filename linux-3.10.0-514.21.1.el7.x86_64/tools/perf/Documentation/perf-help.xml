@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-help</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-help</refname>
+  <refpurpose>display help information about perf</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<simpara><emphasis>perf help</emphasis> [-a|--all] [COMMAND]</simpara>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>With no options and no COMMAND given, the synopsis of the <emphasis>perf</emphasis>
+command and a list of the most commonly used perf commands are printed
+on the standard output.</simpara>
+<simpara>If the option <emphasis>--all</emphasis> or <emphasis>-a</emphasis> is given, then all available commands are
+printed on the standard output.</simpara>
+<simpara>If a perf command is named, a manual page for that command is brought
+up. The <emphasis>man</emphasis> program is used by default for this purpose, but this
+can be overridden by other options or configuration variables.</simpara>
+<simpara>Note that <literal>perf --help ...</literal> is identical to <literal>perf help ...</literal> because the
+former is internally converted into the latter.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-a
+</term>
+<term>
+--all
+</term>
+<listitem>
+<simpara>
+        Prints all the available commands on the standard output. This
+        option supersedes any other option.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_perf">
+<title>PERF</title>
+<simpara>Part of the <citerefentry>
+<refentrytitle>perf</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry> suite</simpara>
+</refsect1>
+</refentry>

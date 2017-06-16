@@ -1,0 +1,223 @@
+Terminals unused in grammar
+
+   PP_ERROR
+
+
+Grammar
+
+    0 $accept: format $end
+
+    1 format: format format_term
+    2       | format_term
+
+    3 format_term: PP_CONFIG ':' bits
+    4            | PP_CONFIG1 ':' bits
+    5            | PP_CONFIG2 ':' bits
+
+    6 bits: bits ',' bit_term
+    7     | bit_term
+
+    8 bit_term: PP_VALUE '-' PP_VALUE
+    9         | PP_VALUE
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+',' (44) 6
+'-' (45) 8
+':' (58) 3 4 5
+error (256)
+PP_CONFIG (258) 3
+PP_CONFIG1 (259) 4
+PP_CONFIG2 (260) 5
+PP_VALUE (261) 8 9
+PP_ERROR (262)
+
+
+Nonterminals, with rules where they appear
+
+$accept (11)
+    on left: 0
+format (12)
+    on left: 1 2, on right: 0 1
+format_term (13)
+    on left: 3 4 5, on right: 1 2
+bits (14)
+    on left: 6 7, on right: 3 4 5 6
+bit_term (15)
+    on left: 8 9, on right: 6 7
+
+
+State 0
+
+    0 $accept: . format $end
+
+    PP_CONFIG   shift, and go to state 1
+    PP_CONFIG1  shift, and go to state 2
+    PP_CONFIG2  shift, and go to state 3
+
+    format       go to state 4
+    format_term  go to state 5
+
+
+State 1
+
+    3 format_term: PP_CONFIG . ':' bits
+
+    ':'  shift, and go to state 6
+
+
+State 2
+
+    4 format_term: PP_CONFIG1 . ':' bits
+
+    ':'  shift, and go to state 7
+
+
+State 3
+
+    5 format_term: PP_CONFIG2 . ':' bits
+
+    ':'  shift, and go to state 8
+
+
+State 4
+
+    0 $accept: format . $end
+    1 format: format . format_term
+
+    $end        shift, and go to state 9
+    PP_CONFIG   shift, and go to state 1
+    PP_CONFIG1  shift, and go to state 2
+    PP_CONFIG2  shift, and go to state 3
+
+    format_term  go to state 10
+
+
+State 5
+
+    2 format: format_term .
+
+    $default  reduce using rule 2 (format)
+
+
+State 6
+
+    3 format_term: PP_CONFIG ':' . bits
+
+    PP_VALUE  shift, and go to state 11
+
+    bits      go to state 12
+    bit_term  go to state 13
+
+
+State 7
+
+    4 format_term: PP_CONFIG1 ':' . bits
+
+    PP_VALUE  shift, and go to state 11
+
+    bits      go to state 14
+    bit_term  go to state 13
+
+
+State 8
+
+    5 format_term: PP_CONFIG2 ':' . bits
+
+    PP_VALUE  shift, and go to state 11
+
+    bits      go to state 15
+    bit_term  go to state 13
+
+
+State 9
+
+    0 $accept: format $end .
+
+    $default  accept
+
+
+State 10
+
+    1 format: format format_term .
+
+    $default  reduce using rule 1 (format)
+
+
+State 11
+
+    8 bit_term: PP_VALUE . '-' PP_VALUE
+    9         | PP_VALUE .
+
+    '-'  shift, and go to state 16
+
+    $default  reduce using rule 9 (bit_term)
+
+
+State 12
+
+    3 format_term: PP_CONFIG ':' bits .
+    6 bits: bits . ',' bit_term
+
+    ','  shift, and go to state 17
+
+    $default  reduce using rule 3 (format_term)
+
+
+State 13
+
+    7 bits: bit_term .
+
+    $default  reduce using rule 7 (bits)
+
+
+State 14
+
+    4 format_term: PP_CONFIG1 ':' bits .
+    6 bits: bits . ',' bit_term
+
+    ','  shift, and go to state 17
+
+    $default  reduce using rule 4 (format_term)
+
+
+State 15
+
+    5 format_term: PP_CONFIG2 ':' bits .
+    6 bits: bits . ',' bit_term
+
+    ','  shift, and go to state 17
+
+    $default  reduce using rule 5 (format_term)
+
+
+State 16
+
+    8 bit_term: PP_VALUE '-' . PP_VALUE
+
+    PP_VALUE  shift, and go to state 18
+
+
+State 17
+
+    6 bits: bits ',' . bit_term
+
+    PP_VALUE  shift, and go to state 11
+
+    bit_term  go to state 19
+
+
+State 18
+
+    8 bit_term: PP_VALUE '-' PP_VALUE .
+
+    $default  reduce using rule 8 (bit_term)
+
+
+State 19
+
+    6 bits: bits ',' bit_term .
+
+    $default  reduce using rule 6 (bits)

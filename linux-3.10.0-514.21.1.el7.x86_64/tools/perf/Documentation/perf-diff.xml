@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-diff</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-diff</refname>
+  <refpurpose>Read perf.data files and display the differential profile</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf diff</emphasis> [baseline file] [data file1] [[data file2] &#8230; ]</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>This command displays the performance difference amongst two or more perf.data
+files captured via perf record.</simpara>
+<simpara>If no parameters are passed it will assume perf.data.old and perf.data.</simpara>
+<simpara>The differential profile is displayed only for events matching both
+specified perf.data files.</simpara>
+<simpara>If no parameters are passed the samples will be sorted by dso and symbol.
+As the perf.data files could come from different binaries, the symbols addresses
+could vary. So perf diff is based on the comparison of the files and
+symbols name.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-D
+</term>
+<term>
+--dump-raw-trace
+</term>
+<listitem>
+<simpara>
+        Dump raw trace in ASCII.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--kallsyms=&lt;file&gt;
+</term>
+<listitem>
+<simpara>
+        kallsyms pathname
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-m
+</term>
+<term>
+--modules
+</term>
+<listitem>
+<simpara>
+        Load module symbols. WARNING: use only with -k and LIVE kernel
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-d
+</term>
+<term>
+--dsos=
+</term>
+<listitem>
+<simpara>
+        Only consider symbols in these dsos. CSV that understands
+        <ulink url="file://filename">file://filename</ulink> entries.  This option will affect the percentage
+        of the Baseline/Delta column.  See --percentage for more info.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-C
+</term>
+<term>
+--comms=
+</term>
+<listitem>
+<simpara>
+        Only consider symbols in these comms. CSV that understands
+        <ulink url="file://filename">file://filename</ulink> entries.  This option will affect the percentage
+        of the Baseline/Delta column.  See --percentage for more info.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-S
+</term>
+<term>
+--symbols=
+</term>
+<listitem>
+<simpara>
+        Only consider these symbols. CSV that understands
+        <ulink url="file://filename">file://filename</ulink> entries.  This option will affect the percentage
+        of the Baseline/Delta column.  See --percentage for more info.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-s
+</term>
+<term>
+--sort=
+</term>
+<listitem>
+<simpara>
+        Sort by key(s): pid, comm, dso, symbol, cpu, parent, srcline.
+        Please see description of --sort in the perf-report man page.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-t
+</term>
+<term>
+--field-separator=
+</term>
+<listitem>
+<simpara>
+        Use a special separator character and don&#8217;t pad with spaces, replacing
+        all occurrences of this separator in symbol names (and other output)
+        with a <emphasis>.</emphasis> character, that thus it&#8217;s the only non valid separator.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be verbose, for instance, show the raw counts in addition to the
+        diff.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-f
+</term>
+<term>
+--force
+</term>
+<listitem>
+<simpara>
+       Don&#8217;t complain, do it.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--symfs=&lt;directory&gt;
+</term>
+<listitem>
+<simpara>
+        Look for files with symbols relative to this directory.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-b
+</term>
+<term>
+--baseline-only
+</term>
+<listitem>
+<simpara>
+        Show only items with match in baseline.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-c
+</term>
+<term>
+--compute
+</term>
+<listitem>
+<simpara>
+        Differential computation selection - delta,ratio,wdiff (default is delta).
+        See COMPARISON METHODS section for more info.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-p
+</term>
+<term>
+--period
+</term>
+<listitem>
+<simpara>
+        Show period values for both compared hist entries.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-F
+</term>
+<term>
+--formula
+</term>
+<listitem>
+<simpara>
+        Show formula for given computation.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-o
+</term>
+<term>
+--order
+</term>
+<listitem>
+<simpara>
+       Specify compute sorting column number.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--percentage
+</term>
+<listitem>
+<simpara>
+        Determine how to display the overhead percentage of filtered entries.
+        Filters can be applied by --comms, --dsos and/or --symbols options.
+</simpara>
+<literallayout class="monospaced">"relative" means it's relative to filtered entries only so that the
+sum of shown entries will be always 100%.  "absolute" means it retains
+the original value before and after the filter is applied.</literallayout>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_comparison">
+<title>COMPARISON</title>
+<simpara>The comparison is governed by the baseline file. The baseline perf.data
+file is iterated for samples. All other perf.data files specified on
+the command line are searched for the baseline sample pair. If the pair
+is found, specified computation is made and result is displayed.</simpara>
+<simpara>All samples from non-baseline perf.data files, that do not match any
+baseline entry, are displayed with empty space within baseline column
+and possible computation results (delta) in their related column.</simpara>
+<simpara>Example files samples:
+- file A with samples f1, f2, f3, f4,    f6
+- file B with samples     f2,     f4, f5
+- file C with samples f1, f2,         f5</simpara>
+<simpara>Example output:
+  x - computation takes place for pair
+  b - baseline sample percentage</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+perf diff A B C
+</simpara>
+<literallayout class="monospaced">baseline/A compute/B compute/C  samples
+---------------------------------------
+b                    x          f1
+b          x         x          f2
+b                               f3
+b          x                    f4
+b                               f6
+           x         x          f5</literallayout>
+</listitem>
+<listitem>
+<simpara>
+perf diff B A C
+</simpara>
+<literallayout class="monospaced">baseline/B compute/A compute/C  samples
+---------------------------------------
+b          x         x          f2
+b          x                    f4
+b                    x          f5
+           x         x          f1
+           x                    f3
+           x                    f6</literallayout>
+</listitem>
+<listitem>
+<simpara>
+perf diff C B A
+</simpara>
+<literallayout class="monospaced">baseline/C compute/B compute/A  samples
+---------------------------------------
+b                    x          f1
+b          x         x          f2
+b          x                    f5
+                     x          f3
+           x         x          f4
+                     x          f6</literallayout>
+</listitem>
+</itemizedlist>
+</refsect1>
+<refsect1 id="_comparison_methods">
+<title>COMPARISON METHODS</title>
+<refsect2 id="_delta">
+<title>delta</title>
+<simpara>If specified the <emphasis>Delta</emphasis> column is displayed with value <emphasis>d</emphasis> computed as:</simpara>
+<literallayout class="monospaced">d = A-&gt;period_percent - B-&gt;period_percent</literallayout>
+<simpara>with:
+  - A/B being matching hist entry from data/baseline file specified
+    (or perf.data/perf.data.old) respectively.</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+period_percent being the % of the hist entry period value within
+    single data file
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+with filtering by -C, -d and/or -S, period_percent might be changed
+    relative to how entries are filtered.  Use --percentage=absolute to
+    prevent such fluctuation.
+</simpara>
+</listitem>
+</itemizedlist>
+</refsect2>
+<refsect2 id="_ratio">
+<title>ratio</title>
+<simpara>If specified the <emphasis>Ratio</emphasis> column is displayed with value <emphasis>r</emphasis> computed as:</simpara>
+<literallayout class="monospaced">r = A-&gt;period / B-&gt;period</literallayout>
+<simpara>with:
+  - A/B being matching hist entry from data/baseline file specified
+    (or perf.data/perf.data.old) respectively.</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+period being the hist entry period value
+</simpara>
+</listitem>
+</itemizedlist>
+</refsect2>
+<refsect2 id="_wdiff_weight_b_weight_a">
+<title>wdiff:WEIGHT-B,WEIGHT-A</title>
+<simpara>If specified the <emphasis>Weighted diff</emphasis> column is displayed with value <emphasis>d</emphasis> computed as:</simpara>
+<literallayout class="monospaced">d = B-&gt;period * WEIGHT-A - A-&gt;period * WEIGHT-B</literallayout>
+<itemizedlist>
+<listitem>
+<simpara>
+A/B being matching hist entry from data/baseline file specified
+    (or perf.data/perf.data.old) respectively.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+period being the hist entry period value
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+WEIGHT-A/WEIGHT-B being user supplied weights in the the <emphasis>-c</emphasis> option
+    behind <emphasis>:</emphasis> separator like <emphasis>-c wdiff:1,2</emphasis>.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+WEIGHT-A being the weight of the data file
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+WEIGHT-B being the weight of the baseline data file
+</simpara>
+</listitem>
+</itemizedlist>
+</refsect2>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-report</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

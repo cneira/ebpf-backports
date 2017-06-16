@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-sched</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-sched</refname>
+  <refpurpose>Tool to trace/measure scheduler properties (latencies)</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf sched</emphasis> {record|latency|map|replay|script}</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>There are five variants of perf sched:</simpara>
+<literallayout class="monospaced">'perf sched record &lt;command&gt;' to record the scheduling events
+of an arbitrary workload.</literallayout>
+<literallayout class="monospaced">'perf sched latency' to report the per task scheduling latencies
+and other scheduling properties of the workload.</literallayout>
+<literallayout class="monospaced">'perf sched script' to see a detailed trace of the workload that
+ was recorded (aliased to 'perf script' for now).</literallayout>
+<literallayout class="monospaced">'perf sched replay' to simulate the workload that was recorded
+via perf sched record. (this is done by starting up mockup threads
+that mimic the workload based on the events in the trace. These
+threads can then replay the timings (CPU runtime and sleep patterns)
+of the workload as it occurred when it was recorded - and can repeat
+it a number of times, measuring its performance.)</literallayout>
+<literallayout class="monospaced">'perf sched map' to print a textual context-switching outline of
+workload captured via perf sched record.  Columns stand for
+individual CPUs, and the two-letter shortcuts stand for tasks that
+are running on a CPU. A '*' denotes the CPU that had the event, and
+a dot signals an idle CPU.</literallayout>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-i
+</term>
+<term>
+--input=&lt;file&gt;
+</term>
+<listitem>
+<simpara>
+        Input file name. (default: perf.data unless stdin is a fifo)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose. (show symbol address, etc)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-D
+</term>
+<term>
+--dump-raw-trace=
+</term>
+<listitem>
+<simpara>
+        Display verbose dump of the sched data.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

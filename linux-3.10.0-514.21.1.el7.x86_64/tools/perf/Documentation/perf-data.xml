@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-data</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-data</refname>
+  <refpurpose>Data file related processing</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf data</emphasis> [&lt;common options&gt;] &lt;command&gt; [&lt;options&gt;]",</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>Data file related processing.</simpara>
+</refsect1>
+<refsect1 id="_commands">
+<title>COMMANDS</title>
+<variablelist>
+<varlistentry>
+<term>
+convert
+</term>
+<listitem>
+<simpara>
+        Converts perf data file into another format (only CTF [1] format is support by now).
+        It&#8217;s possible to set data-convert debug variable to get debug messages from conversion,
+        like:
+          perf --debug data-convert data convert &#8230;
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_options_for_emphasis_convert_emphasis">
+<title>OPTIONS for <emphasis>convert</emphasis></title>
+<variablelist>
+<varlistentry>
+<term>
+--to-ctf
+</term>
+<listitem>
+<simpara>
+        Triggers the CTF conversion, specify the path of CTF data directory.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-i
+</term>
+<listitem>
+<simpara>
+        Specify input perf data file path.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose (show counter open errors, etc).
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>
+[1] Common Trace Format - <ulink url="http://www.efficios.com/ctf">http://www.efficios.com/ctf</ulink></simpara>
+</refsect1>
+</refentry>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-trace</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-trace</refname>
+  <refpurpose>strace inspired tool</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf trace</emphasis>
+<emphasis>perf trace record</emphasis></literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>This command will show the events associated with the target, initially
+syscalls, but other system events like pagefaults, task lifetime events,
+scheduling events, etc.</simpara>
+<simpara>This is a live mode tool in addition to working with perf.data files like
+the other perf tools. Files can be generated using the <emphasis>perf record</emphasis> command
+but the session needs to include the raw_syscalls events (-e <emphasis>raw_syscalls:*</emphasis>).
+Alternatively, <emphasis>perf trace record</emphasis> can be used as a shortcut to
+automatically include the raw_syscalls events when writing events to a file.</simpara>
+<simpara>The following options apply to perf trace; options to perf trace record are
+found in the perf record man page.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-a
+</term>
+<term>
+--all-cpus
+</term>
+<listitem>
+<simpara>
+        System-wide collection from all CPUs.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-e
+</term>
+<term>
+--expr
+</term>
+<listitem>
+<simpara>
+        List of syscalls to show, currently only syscall names.
+        Prefixing with ! shows all syscalls but the ones specified.  You may
+        need to escape it.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-o
+</term>
+<term>
+--output=
+</term>
+<listitem>
+<simpara>
+        Output file name.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-p
+</term>
+<term>
+--pid=
+</term>
+<listitem>
+<simpara>
+        Record events on existing process ID (comma separated list).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-t
+</term>
+<term>
+--tid=
+</term>
+<listitem>
+<simpara>
+        Record events on existing thread ID (comma separated list).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-u
+</term>
+<term>
+--uid=
+</term>
+<listitem>
+<simpara>
+        Record events in threads owned by uid. Name or number.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--filter-pids=
+</term>
+<listitem>
+<simpara>
+        Filter out events for these pids and for <emphasis>trace</emphasis> itself (comma separated list).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose=
+</term>
+<listitem>
+<simpara>
+        Verbosity level.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--no-inherit
+</term>
+<listitem>
+<simpara>
+        Child tasks do not inherit counters.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-m
+</term>
+<term>
+--mmap-pages=
+</term>
+<listitem>
+<simpara>
+        Number of mmap data pages (must be a power of two) or size
+        specification with appended unit character - B/K/M/G. The
+        size is rounded up to have nearest pages power of two value.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-C
+</term>
+<term>
+--cpu
+</term>
+<listitem>
+<simpara>
+Collect samples only on the list of CPUs provided. Multiple CPUs can be provided as a
+comma-separated list with no space: 0,1. Ranges of CPUs are specified with -: 0-2.
+In per-thread mode with inheritance mode on (default), Events are captured only when
+the thread executes on the designated CPUs. Default is to monitor all CPUs.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+<simpara>--duration:
+        Show only events that had a duration greater than N.M ms.</simpara>
+<simpara>--sched:
+        Accrue thread runtime and provide a summary at the end of the session.</simpara>
+<simpara>-i
+--input
+        Process events from a given perf data file.</simpara>
+<simpara>-T
+--time
+        Print full timestamp rather time relative to first sample.</simpara>
+<variablelist>
+<varlistentry>
+<term>
+--comm
+</term>
+<listitem>
+<simpara>
+        Show process COMM right beside its ID, on by default, disable with --no-comm.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-s
+</term>
+<term>
+--summary
+</term>
+<listitem>
+<simpara>
+        Show only a summary of syscalls by thread with min, max, and average times
+    (in msec) and relative stddev.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-S
+</term>
+<term>
+--with-summary
+</term>
+<listitem>
+<simpara>
+        Show all syscalls followed by a summary by thread with min, max, and
+    average times (in msec) and relative stddev.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--tool_stats
+</term>
+<listitem>
+<simpara>
+        Show tool stats such as number of times fd&#8594;pathname was discovered thru
+        hooking the open syscall return + vfs_getname or via reading /proc/pid/fd, etc.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-F=[all|min|maj]
+</term>
+<term>
+--pf=[all|min|maj]
+</term>
+<listitem>
+<simpara>
+        Trace pagefaults. Optionally, you can specify whether you want minor,
+        major or all pagefaults. Default value is maj.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--syscalls
+</term>
+<listitem>
+<simpara>
+        Trace system calls. This options is enabled by default.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--event
+</term>
+<listitem>
+<simpara>
+        Trace other events, see <emphasis>perf list</emphasis> for a complete list.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--proc-map-timeout
+</term>
+<listitem>
+<simpara>
+        When processing pre-existing threads /proc/XXX/mmap, it may take a long time,
+        because the file may be huge. A time out is needed in such cases.
+        This option sets the time out limit. The default value is 500 ms.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_pagefaults">
+<title>PAGEFAULTS</title>
+<simpara>When tracing pagefaults, the format of the trace is as follows:</simpara>
+<simpara>&lt;min|maj&gt;fault [&lt;ip.symbol&gt;+&lt;ip.offset&gt;] &#8658; &lt;<ulink url="mailto:addr.dso@addr.offset">addr.dso@addr.offset</ulink>&gt; (&lt;map type&gt;&lt;addr level&gt;).</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+min/maj indicates whether fault event is minor or major;
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+ip.symbol shows symbol for instruction pointer (the code that generated the
+  fault); if no debug symbols available, perf trace will print raw IP;
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+addr.dso shows DSO for the faulted address;
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+map type is either <emphasis>d</emphasis> for non-executable maps or <emphasis>x</emphasis> for executable maps;
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+addr level is either <emphasis>k</emphasis> for kernel dso or <emphasis>.</emphasis> for user dso.
+</simpara>
+</listitem>
+</itemizedlist>
+<simpara>For symbols resolution you may need to install debugging symbols.</simpara>
+<simpara>Please be aware that duration is currently always 0 and doesn&#8217;t reflect actual
+time it took for fault to be handled!</simpara>
+<simpara>When --verbose specified, perf trace tries to print all available information
+for both IP and fault address in the form of <ulink url="mailto:dso@symbol">dso@symbol</ulink>+offset.</simpara>
+</refsect1>
+<refsect1 id="_examples">
+<title>EXAMPLES</title>
+<simpara>Trace only major pagefaults:</simpara>
+<literallayout class="monospaced">$ perf trace --no-syscalls -F</literallayout>
+<simpara>Trace syscalls, major and minor pagefaults:</simpara>
+<literallayout class="monospaced">$ perf trace -F all</literallayout>
+<literallayout class="monospaced">1416.547 ( 0.000 ms): python/20235 majfault [CRYPTO_push_info_+0x0] =&gt; /lib/x86_64-linux-gnu/libcrypto.so.1.0.0@0x61be0 (x.)</literallayout>
+<literallayout class="monospaced">As you can see, there was major pagefault in python process, from
+CRYPTO_push_info_ routine which faulted somewhere in libcrypto.so.</literallayout>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-script</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-timechart</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-timechart</refname>
+  <refpurpose>Tool to visualize total system behavior during a workload</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout></literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>There are two variants of perf timechart:</simpara>
+<literallayout class="monospaced">'perf timechart record &lt;command&gt;' to record the system level events
+of an arbitrary workload. By default timechart records only scheduler
+and CPU events (task switches, running times, CPU power states, etc),
+but it's possible to record IO (disk, network) activity using -I argument.</literallayout>
+<literallayout class="monospaced">'perf timechart' to turn a trace into a Scalable Vector Graphics file,
+that can be viewed with popular SVG viewers such as 'Inkscape'. Depending
+on the events in the perf.data file, timechart will contain scheduler/cpu
+events or IO events.</literallayout>
+<literallayout class="monospaced">In IO mode, every bar has two charts: upper and lower.
+Upper bar shows incoming events (disk reads, ingress network packets).
+Lower bar shows outgoing events (disk writes, egress network packets).
+There are also poll bars which show how much time application spent
+in poll/epoll/select syscalls.</literallayout>
+</refsect1>
+<refsect1 id="_timechart_options">
+<title>TIMECHART OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-o
+</term>
+<term>
+--output=
+</term>
+<listitem>
+<simpara>
+        Select the output file (default: output.svg)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-i
+</term>
+<term>
+--input=
+</term>
+<listitem>
+<simpara>
+        Select the input file (default: perf.data unless stdin is a fifo)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-w
+</term>
+<term>
+--width=
+</term>
+<listitem>
+<simpara>
+        Select the width of the SVG file (default: 1000)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-P
+</term>
+<term>
+--power-only
+</term>
+<listitem>
+<simpara>
+        Only output the CPU power section of the diagram
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-T
+</term>
+<term>
+--tasks-only
+</term>
+<listitem>
+<simpara>
+        Don&#8217;t output processor state transitions
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-p
+</term>
+<term>
+--process
+</term>
+<listitem>
+<simpara>
+        Select the processes to display, by name or PID
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--symfs=&lt;directory&gt;
+</term>
+<listitem>
+<simpara>
+        Look for files with symbols relative to this directory.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-n
+</term>
+<term>
+--proc-num
+</term>
+<listitem>
+<simpara>
+        Print task info for at least given number of tasks.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-t
+</term>
+<term>
+--topology
+</term>
+<listitem>
+<simpara>
+        Sort CPUs according to topology.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--highlight=&lt;duration_nsecs|task_name&gt;
+</term>
+<listitem>
+<simpara>
+        Highlight tasks (using different color) that run more than given
+        duration or tasks with given name. If number is given it&#8217;s interpreted
+        as number of nanoseconds. If non-numeric string is given it&#8217;s
+        interpreted as task name.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--io-skip-eagain
+</term>
+<listitem>
+<simpara>
+        Don&#8217;t draw EAGAIN IO events.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--io-min-time=&lt;nsecs&gt;
+</term>
+<listitem>
+<simpara>
+        Draw small events as if they lasted min-time. Useful when you need
+        to see very small and fast IO. It&#8217;s possible to specify ms or us
+        suffix to specify time in milliseconds or microseconds.
+        Default value is 1ms.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--io-merge-dist=&lt;nsecs&gt;
+</term>
+<listitem>
+<simpara>
+        Merge events that are merge-dist nanoseconds apart.
+        Reduces number of figures on the SVG and makes it more render-friendly.
+        It&#8217;s possible to specify ms or us suffix to specify time in
+        milliseconds or microseconds.
+        Default value is 1us.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_record_options">
+<title>RECORD OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-P
+</term>
+<term>
+--power-only
+</term>
+<listitem>
+<simpara>
+        Record only power-related events
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-T
+</term>
+<term>
+--tasks-only
+</term>
+<listitem>
+<simpara>
+        Record only tasks-related events
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-I
+</term>
+<term>
+--io-only
+</term>
+<listitem>
+<simpara>
+        Record only io-related events
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-g
+</term>
+<term>
+--callchain
+</term>
+<listitem>
+<simpara>
+        Do call-graph (stack chain/backtrace) recording
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_examples">
+<title>EXAMPLES</title>
+<simpara>$ perf timechart record git pull</simpara>
+<literallayout class="monospaced">[ perf record: Woken up 13 times to write data ]
+[ perf record: Captured and wrote 4.253 MB perf.data (~185801 samples) ]</literallayout>
+<simpara>$ perf timechart</simpara>
+<literallayout class="monospaced">Written 10.2 seconds of trace to output.svg.</literallayout>
+<simpara>Record system-wide timechart:</simpara>
+<literallayout class="monospaced">$ perf timechart record</literallayout>
+<literallayout class="monospaced">then generate timechart and highlight 'gcc' tasks:</literallayout>
+<literallayout class="monospaced">$ perf timechart --highlight gcc</literallayout>
+<simpara>Record system-wide IO events:</simpara>
+<literallayout class="monospaced">$ perf timechart record -I</literallayout>
+<literallayout class="monospaced">then generate timechart:</literallayout>
+<literallayout class="monospaced">$ perf timechart</literallayout>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

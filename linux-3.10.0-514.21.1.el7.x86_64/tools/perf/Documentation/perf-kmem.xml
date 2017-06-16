@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-kmem</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-kmem</refname>
+  <refpurpose>Tool to trace/measure kernel memory properties</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf kmem</emphasis> {record|stat} [&lt;options&gt;]</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>There are two variants of perf kmem:</simpara>
+<literallayout class="monospaced">'perf kmem record &lt;command&gt;' to record the kmem events
+of an arbitrary workload.</literallayout>
+<literallayout class="monospaced">'perf kmem stat' to report kernel memory statistics.</literallayout>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-i &lt;file&gt;
+</term>
+<term>
+--input=&lt;file&gt;
+</term>
+<listitem>
+<simpara>
+        Select the input file (default: perf.data unless stdin is a fifo)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose. (show symbol address, etc)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--caller
+</term>
+<listitem>
+<simpara>
+        Show per-callsite statistics
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--alloc
+</term>
+<listitem>
+<simpara>
+        Show per-allocation statistics
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-s &lt;key[,key2&#8230;]&gt;
+</term>
+<term>
+--sort=&lt;key[,key2&#8230;]&gt;
+</term>
+<listitem>
+<simpara>
+        Sort the output (default: <emphasis>frag,hit,bytes</emphasis> for slab and <emphasis>bytes,hit</emphasis>
+        for page).  Available sort keys are <emphasis>ptr, callsite, bytes, hit,
+        pingpong, frag</emphasis> for slab and <emphasis>page, callsite, bytes, hit, order,
+        migtype, gfp</emphasis> for page.  This option should be preceded by one of the
+        mode selection options - i.e. --slab, --page, --alloc and/or --caller.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-l &lt;num&gt;
+</term>
+<term>
+--line=&lt;num&gt;
+</term>
+<listitem>
+<simpara>
+        Print n lines only
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--raw-ip
+</term>
+<listitem>
+<simpara>
+        Print raw ip instead of symbol
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--slab
+</term>
+<listitem>
+<simpara>
+        Analyze SLAB allocator events.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--page
+</term>
+<listitem>
+<simpara>
+        Analyze page allocator events
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--live
+</term>
+<listitem>
+<simpara>
+        Show live page stat.  The perf kmem shows total allocation stat by
+        default, but this option shows live (currently allocated) pages
+        instead.  (This option works with --page option only)
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

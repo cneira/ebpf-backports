@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-kvm</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-kvm</refname>
+  <refpurpose>Tool to trace/measure kvm guest os</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf kvm</emphasis> [--host] [--guest] [--guestmount=&lt;path&gt;
+        [--guestkallsyms=&lt;path&gt; --guestmodules=&lt;path&gt; | --guestvmlinux=&lt;path&gt;]]
+        {top|record|report|diff|buildid-list} [&lt;options&gt;]
+<emphasis>perf kvm</emphasis> [--host] [--guest] [--guestkallsyms=&lt;path&gt; --guestmodules=&lt;path&gt;
+        | --guestvmlinux=&lt;path&gt;] {top|record|report|diff|buildid-list|stat} [&lt;options&gt;]
+'perf kvm stat [record|report|live] [&lt;options&gt;]</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>There are a couple of variants of perf kvm:</simpara>
+<literallayout class="monospaced">'perf kvm [options] top &lt;command&gt;' to generates and displays
+a performance counter profile of guest os in realtime
+of an arbitrary workload.</literallayout>
+<literallayout class="monospaced">'perf kvm record &lt;command&gt;' to record the performance counter profile
+of an arbitrary workload and save it into a perf data file. We set the
+default behavior of perf kvm as --guest, so if neither --host nor --guest
+is input, the perf data file name is perf.data.guest. If --host is input,
+the perf data file name is perf.data.kvm. If you want to record data into
+perf.data.host, please input --host --no-guest. The behaviors are shown as
+following:
+  Default('')         -&gt;  perf.data.guest
+  --host              -&gt;  perf.data.kvm
+  --guest             -&gt;  perf.data.guest
+  --host --guest      -&gt;  perf.data.kvm
+  --host --no-guest   -&gt;  perf.data.host</literallayout>
+<literallayout class="monospaced">'perf kvm report' to display the performance counter profile information
+recorded via perf kvm record.</literallayout>
+<literallayout class="monospaced">'perf kvm diff' to displays the performance difference amongst two perf.data
+files captured via perf record.</literallayout>
+<literallayout class="monospaced">'perf kvm buildid-list' to  display the buildids found in a perf data file,
+so that other tools can be used to fetch packages with matching symbol tables
+for use by perf report. As buildid is read from /sys/kernel/notes in os, then
+if you want to list the buildid for guest, please make sure your perf data file
+was captured with --guestmount in perf kvm record.</literallayout>
+<literallayout class="monospaced">'perf kvm stat &lt;command&gt;' to run a command and gather performance counter
+statistics.
+Especially, perf 'kvm stat record/report' generates a statistical analysis
+of KVM events. Currently, vmexit, mmio and ioport events are supported.
+'perf kvm stat record &lt;command&gt;' records kvm events and the events between
+start and end &lt;command&gt;.
+And this command produces a file which contains tracing results of kvm
+events.</literallayout>
+<literallayout class="monospaced">'perf kvm stat report' reports statistical data which includes events
+handled time, samples, and so on.</literallayout>
+<literallayout class="monospaced">'perf kvm stat live' reports statistical data in a live mode (similar to
+record + report but with statistical data updated live at a given display
+rate).</literallayout>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-i
+</term>
+<term>
+--input=&lt;path&gt;
+</term>
+<listitem>
+<simpara>
+        Input file name.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-o
+</term>
+<term>
+--output=&lt;path&gt;
+</term>
+<listitem>
+<simpara>
+        Output file name.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--host
+</term>
+<listitem>
+<simpara>
+        Collect host side performance profile.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--guest
+</term>
+<listitem>
+<simpara>
+        Collect guest side performance profile.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--guestmount=&lt;path&gt;
+</term>
+<listitem>
+<simpara>
+        Guest os root file system mount directory. Users mounts guest os
+        root directories under &lt;path&gt; by a specific filesystem access method,
+        typically, sshfs. For example, start 2 guest os. The one&#8217;s pid is 8888
+        and the other&#8217;s is 9999.
+        #mkdir <subscript>/guestmount; cd </subscript>/guestmount
+        #sshfs -o allow_other,direct_io -p 5551 localhost:/ 8888/
+        #sshfs -o allow_other,direct_io -p 5552 localhost:/ 9999/
+        #perf kvm --host --guest --guestmount=~/guestmount top
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--guestkallsyms=&lt;path&gt;
+</term>
+<listitem>
+<simpara>
+        Guest os /proc/kallsyms file copy. <emphasis>perf</emphasis> kvm' reads it to get guest
+        kernel symbols. Users copy it out from guest os.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--guestmodules=&lt;path&gt;
+</term>
+<listitem>
+<simpara>
+        Guest os /proc/modules file copy. <emphasis>perf</emphasis> kvm' reads it to get guest
+        kernel module information. Users copy it out from guest os.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--guestvmlinux=&lt;path&gt;
+</term>
+<listitem>
+<simpara>
+        Guest os kernel vmlinux.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose (show counter open errors, etc).
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_stat_report_options">
+<title>STAT REPORT OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+--vcpu=&lt;value&gt;
+</term>
+<listitem>
+<simpara>
+       analyze events which occur on this vcpu. (default: all vcpus)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--event=&lt;value&gt;
+</term>
+<listitem>
+<simpara>
+       event to be analyzed. Possible values: vmexit, mmio, ioport.
+       (default: vmexit)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-k
+</term>
+<term>
+--key=&lt;value&gt;
+</term>
+<listitem>
+<simpara>
+       Sorting key. Possible values: sample (default, sort by samples
+       number), time (sort by average time).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-p
+</term>
+<term>
+--pid=
+</term>
+<listitem>
+<simpara>
+    Analyze events only for given process ID(s) (comma separated list).
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_stat_live_options">
+<title>STAT LIVE OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-d
+</term>
+<term>
+--display
+</term>
+<listitem>
+<simpara>
+        Time in seconds between display updates
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-m
+</term>
+<term>
+--mmap-pages=
+</term>
+<listitem>
+<simpara>
+    Number of mmap data pages (must be a power of two) or size
+    specification with appended unit character - B/K/M/G. The
+    size is rounded up to have nearest pages power of two value.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-a
+</term>
+<term>
+--all-cpus
+</term>
+<listitem>
+<simpara>
+        System-wide collection from all CPUs.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-p
+</term>
+<term>
+--pid=
+</term>
+<listitem>
+<simpara>
+    Analyze events only for given process ID(s) (comma separated list).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--vcpu=&lt;value&gt;
+</term>
+<listitem>
+<simpara>
+       analyze events which occur on this vcpu. (default: all vcpus)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--event=&lt;value&gt;
+</term>
+<listitem>
+<simpara>
+       event to be analyzed. Possible values: vmexit, mmio, ioport.
+       (default: vmexit)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-k
+</term>
+<term>
+--key=&lt;value&gt;
+</term>
+<listitem>
+<simpara>
+       Sorting key. Possible values: sample (default, sort by samples
+       number), time (sort by average time).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--duration=&lt;value&gt;
+</term>
+<listitem>
+<simpara>
+       Show events other than HLT that take longer than duration usecs.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--proc-map-timeout
+</term>
+<listitem>
+<simpara>
+        When processing pre-existing threads /proc/XXX/mmap, it may take
+        a long time, because the file may be huge. A time out is needed
+        in such cases.
+        This option sets the time out limit. The default value is 500 ms.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-top</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-report</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>,
+<citerefentry>
+<refentrytitle>perf-diff</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-buildid-list</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>,
+<citerefentry>
+<refentrytitle>perf-stat</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

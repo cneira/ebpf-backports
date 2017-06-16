@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-probe</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-probe</refname>
+  <refpurpose>Define new dynamic tracepoints</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf probe</emphasis> [options] --add=<emphasis>PROBE</emphasis> [&#8230;]
+or
+<emphasis>perf probe</emphasis> [options] PROBE
+or
+<emphasis>perf probe</emphasis> [options] --del=<emphasis>[GROUP:]EVENT</emphasis> [&#8230;]
+or
+<emphasis>perf probe</emphasis> --list[=[GROUP:]EVENT]
+or
+<emphasis>perf probe</emphasis> [options] --line=<emphasis>LINE</emphasis>
+or
+<emphasis>perf probe</emphasis> [options] --vars=<emphasis>PROBEPOINT</emphasis>
+or
+<emphasis>perf probe</emphasis> [options] --funcs</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>This command defines dynamic tracepoint events, by symbol and registers
+without debuginfo, or by C expressions (C line numbers, C function names,
+and C local variables) with debuginfo.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-k
+</term>
+<term>
+--vmlinux=PATH
+</term>
+<listitem>
+<simpara>
+        Specify vmlinux path which has debuginfo (Dwarf binary).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-m
+</term>
+<term>
+--module=MODNAME|PATH
+</term>
+<listitem>
+<simpara>
+        Specify module name in which perf-probe searches probe points
+        or lines. If a path of module file is passed, perf-probe
+        treat it as an offline module (this means you can add a probe on
+        a module which has not been loaded yet).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-s
+</term>
+<term>
+--source=PATH
+</term>
+<listitem>
+<simpara>
+        Specify path to kernel source.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose (show parsed arguments, etc).
+        Can not use with -q.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-q
+</term>
+<term>
+--quiet
+</term>
+<listitem>
+<simpara>
+        Be quiet (do not show any messages including errors).
+        Can not use with -v.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-a
+</term>
+<term>
+--add=
+</term>
+<listitem>
+<simpara>
+        Define a probe event (see PROBE SYNTAX for detail).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-d
+</term>
+<term>
+--del=
+</term>
+<listitem>
+<simpara>
+        Delete probe events. This accepts glob wildcards(<emphasis>*</emphasis>, <emphasis>?</emphasis>) and character
+        classes(e.g. [a-z], [!A-Z]).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-l
+</term>
+<term>
+--list[=[GROUP:]EVENT]
+</term>
+<listitem>
+<simpara>
+        List up current probe events. This can also accept filtering patterns of event names.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-L
+</term>
+<term>
+--line=
+</term>
+<listitem>
+<simpara>
+        Show source code lines which can be probed. This needs an argument
+        which specifies a range of the source code. (see LINE SYNTAX for detail)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-V
+</term>
+<term>
+--vars=
+</term>
+<listitem>
+<simpara>
+        Show available local variables at given probe point. The argument
+        syntax is same as PROBE SYNTAX, but NO ARGs.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--externs
+</term>
+<listitem>
+<simpara>
+        (Only for --vars) Show external defined variables in addition to local
+        variables.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--no-inlines
+</term>
+<listitem>
+<simpara>
+        (Only for --add) Search only for non-inlined functions. The functions
+        which do not have instances are ignored.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-F
+</term>
+<term>
+--funcs[=FILTER]
+</term>
+<listitem>
+<simpara>
+        Show available functions in given module or kernel. With -x/--exec,
+        can also list functions in a user space executable / shared library.
+        This also can accept a FILTER rule argument.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--filter=FILTER
+</term>
+<listitem>
+<simpara>
+        (Only for --vars and --funcs) Set filter. FILTER is a combination of glob
+        pattern, see FILTER PATTERN for detail.
+        Default FILTER is "!<emphasis>k???tab_* &amp; !</emphasis>crc_*" for --vars, and "!_*"
+        for --funcs.
+        If several filters are specified, only the last filter is used.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-f
+</term>
+<term>
+--force
+</term>
+<listitem>
+<simpara>
+        Forcibly add events with existing name.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-n
+</term>
+<term>
+--dry-run
+</term>
+<listitem>
+<simpara>
+        Dry run. With this option, --add and --del doesn&#8217;t execute actual
+        adding and removal operations.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--max-probes=NUM
+</term>
+<listitem>
+<simpara>
+        Set the maximum number of probe points for an event. Default is 128.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-x
+</term>
+<term>
+--exec=PATH
+</term>
+<listitem>
+<simpara>
+        Specify path to the executable or shared library file for user
+        space tracing. Can also be used with --funcs option.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--demangle
+</term>
+<listitem>
+<simpara>
+        Demangle application symbols. --no-demangle is also available
+        for disabling demangling.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--demangle-kernel
+</term>
+<listitem>
+<simpara>
+        Demangle kernel symbols. --no-demangle-kernel is also available
+        for disabling kernel demangling.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+<simpara>In absence of -m/-x options, perf probe checks if the first argument after
+the options is an absolute path name. If its an absolute path, perf probe
+uses it as a target module/target user space binary to probe.</simpara>
+</refsect1>
+<refsect1 id="_probe_syntax">
+<title>PROBE SYNTAX</title>
+<simpara>Probe points are defined by following syntax.</simpara>
+<literallayout class="monospaced">1) Define event based on function name
+ [EVENT=]FUNC[@SRC][:RLN|+OFFS|%return|;PTN] [ARG ...]</literallayout>
+<literallayout class="monospaced">2) Define event based on source file with line number
+ [EVENT=]SRC:ALN [ARG ...]</literallayout>
+<literallayout class="monospaced">3) Define event based on source file with lazy pattern
+ [EVENT=]SRC;PTN [ARG ...]</literallayout>
+<simpara><emphasis>EVENT</emphasis> specifies the name of new event, if omitted, it will be set the name of the probed function. Currently, event group name is set as <emphasis>probe</emphasis>.
+<emphasis>FUNC</emphasis> specifies a probed function name, and it may have one of the following options; <emphasis>+OFFS</emphasis> is the offset from function entry address in bytes, <emphasis>:RLN</emphasis> is the relative-line number from function entry line, and <emphasis>%return</emphasis> means that it probes function return. And <emphasis>;PTN</emphasis> means lazy matching pattern (see LAZY MATCHING). Note that <emphasis>;PTN</emphasis> must be the end of the probe point definition.  In addition, <emphasis>@SRC</emphasis> specifies a source file which has that function.
+It is also possible to specify a probe point by the source line number or lazy matching by using <emphasis>SRC:ALN</emphasis> or <emphasis>SRC;PTN</emphasis> syntax, where <emphasis>SRC</emphasis> is the source file path, <emphasis>:ALN</emphasis> is the line number and <emphasis>;PTN</emphasis> is the lazy matching pattern.
+<emphasis>ARG</emphasis> specifies the arguments of this probe point, (see PROBE ARGUMENT).</simpara>
+</refsect1>
+<refsect1 id="_probe_argument">
+<title>PROBE ARGUMENT</title>
+<simpara>Each probe argument follows below syntax.</simpara>
+<literallayout class="monospaced">[NAME=]LOCALVAR|$retval|%REG|@SYMBOL[:TYPE]</literallayout>
+<simpara><emphasis>NAME</emphasis> specifies the name of this argument (optional). You can use the name of local variable, local data structure member (e.g. var&#8594;field, var.field2), local array with fixed index (e.g. array[1], var&#8594;array[0], var&#8594;pointer[2]), or kprobe-tracer argument format (e.g. $retval, %ax, etc). Note that the name of this argument will be set as the last member name if you specify a local data structure member (e.g. field2 for <emphasis>var&#8594;field1.field2</emphasis>.)
+<emphasis>$vars</emphasis> and <emphasis>$params</emphasis> special arguments are also available for NAME, <emphasis>$vars</emphasis> is expanded to the local variables (including function parameters) which can access at given probe point. <emphasis>$params</emphasis> is expanded to only the function parameters.
+<emphasis>TYPE</emphasis> casts the type of this argument (optional). If omitted, perf probe automatically set the type based on debuginfo. You can specify <emphasis>string</emphasis> type only for the local variable or structure member which is an array of or a pointer to <emphasis>char</emphasis> or <emphasis>unsigned char</emphasis> type.</simpara>
+<simpara>On x86 systems %REG is always the short form of the register: for example %AX. %RAX or %EAX is not valid.</simpara>
+</refsect1>
+<refsect1 id="_line_syntax">
+<title>LINE SYNTAX</title>
+<simpara>Line range is described by following syntax.</simpara>
+<literallayout class="monospaced">"FUNC[@SRC][:RLN[+NUM|-RLN2]]|SRC[:ALN[+NUM|-ALN2]]"</literallayout>
+<simpara>FUNC specifies the function name of showing lines. <emphasis>RLN</emphasis> is the start line
+number from function entry line, and <emphasis>RLN2</emphasis> is the end line number. As same as
+probe syntax, <emphasis>SRC</emphasis> means the source file path, <emphasis>ALN</emphasis> is start line number,
+and <emphasis>ALN2</emphasis> is end line number in the file. It is also possible to specify how
+many lines to show by using <emphasis>NUM</emphasis>. Moreover, <emphasis>FUNC@SRC</emphasis> combination is good
+for searching a specific function when several functions share same name.
+So, "source.c:100-120" shows lines between 100th to l20th in source.c file. And "func:10+20" shows 20 lines from 10th line of func function.</simpara>
+</refsect1>
+<refsect1 id="_lazy_matching">
+<title>LAZY MATCHING</title>
+<literallayout class="monospaced">The lazy line matching is similar to glob matching but ignoring spaces in both of pattern and target. So this accepts wildcards('*', '?') and character classes(e.g. [a-z], [!A-Z]).</literallayout>
+<simpara>e.g.
+ <emphasis>a=*</emphasis> can matches <emphasis>a=b</emphasis>, <emphasis>a = b</emphasis>, <emphasis>a == b</emphasis> and so on.</simpara>
+<simpara>This provides some sort of flexibility and robustness to probe point definitions against minor code changes. For example, actual 10th line of schedule() can be moved easily by modifying schedule(), but the same line matching <emphasis>rq=cpu_rq*</emphasis> may still exist in the function.)</simpara>
+</refsect1>
+<refsect1 id="_filter_pattern">
+<title>FILTER PATTERN</title>
+<literallayout class="monospaced">The filter pattern is a glob matching pattern(s) to filter variables.
+In addition, you can use "!" for specifying filter-out rule. You also can give several rules combined with "&amp;" or "|", and fold those rules as one rule by using "(" ")".</literallayout>
+<simpara>e.g.
+ With --filter "foo* | bar*", perf probe -V shows variables which start with "foo" or "bar".
+ With --filter "!foo* &amp; *bar", perf probe -V shows variables which don&#8217;t start with "foo" and end with "bar", like "fizzbar". But "foobar" is filtered out.</simpara>
+</refsect1>
+<refsect1 id="_examples">
+<title>EXAMPLES</title>
+<simpara>Display which lines in schedule() can be probed:</simpara>
+<literallayout class="monospaced">./perf probe --line schedule</literallayout>
+<simpara>Add a probe on schedule() function 12th line with recording cpu local variable:</simpara>
+<literallayout class="monospaced">./perf probe schedule:12 cpu
+or
+./perf probe --add='schedule:12 cpu'</literallayout>
+<literallayout class="monospaced">this will add one or more probes which has the name start with "schedule".</literallayout>
+<literallayout class="monospaced">Add probes on lines in schedule() function which calls update_rq_clock().</literallayout>
+<literallayout class="monospaced">./perf probe 'schedule;update_rq_clock*'
+or
+./perf probe --add='schedule;update_rq_clock*'</literallayout>
+<simpara>Delete all probes on schedule().</simpara>
+<literallayout class="monospaced">./perf probe --del='schedule*'</literallayout>
+<simpara>Add probes at zfree() function on /bin/zsh</simpara>
+<literallayout class="monospaced">./perf probe -x /bin/zsh zfree or ./perf probe /bin/zsh zfree</literallayout>
+<simpara>Add probes at malloc() function on libc</simpara>
+<literallayout class="monospaced">./perf probe -x /lib/libc.so.6 malloc or ./perf probe /lib/libc.so.6 malloc</literallayout>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-trace</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

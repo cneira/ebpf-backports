@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-config</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-config</refname>
+  <refpurpose>Get and set variables in a configuration file.</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf config</emphasis> [&lt;file-option&gt;] -l | --list</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>You can manage variables in a configuration file with this command.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-l
+</term>
+<term>
+--list
+</term>
+<listitem>
+<simpara>
+        Show current config variables, name and value, for all sections.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--user
+</term>
+<listitem>
+<simpara>
+        For writing and reading options: write to user
+        <emphasis>$HOME/.perfconfig</emphasis> file or read it.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--system
+</term>
+<listitem>
+<simpara>
+        For writing and reading options: write to system-wide
+        <emphasis>$(sysconfdir)/perfconfig</emphasis> or read it.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_configuration_file">
+<title>CONFIGURATION FILE</title>
+<simpara>The perf configuration file contains many variables to change various
+aspects of each of its tools, including output, disk usage, etc.
+The <emphasis>$HOME/.perfconfig</emphasis> file is used to store a per-user configuration.
+The file <emphasis>$(sysconfdir)/perfconfig</emphasis> can be used to
+store a system-wide default configuration.</simpara>
+<simpara>When reading or writing, the values are read from the system and user
+configuration files by default, and options <emphasis>--system</emphasis> and <emphasis>--user</emphasis>
+can be used to tell the command to read from or write to only that location.</simpara>
+<refsect2 id="_syntax">
+<title>Syntax</title>
+<simpara>The file consist of sections. A section starts with its name
+surrounded by square brackets and continues till the next section
+begins. Each variable must be in a section, and have the form
+<emphasis>name = value</emphasis>, for example:</simpara>
+<literallayout class="monospaced">[section]
+        name1 = value1
+        name2 = value2</literallayout>
+<simpara>Section names are case sensitive and can contain any characters except
+newline (double quote <literal>"</literal> and backslash have to be escaped as <literal>\"</literal> and <literal>\\</literal>,
+respectively). Section headers can&#8217;t span multiple lines.</simpara>
+</refsect2>
+<refsect2 id="_example">
+<title>Example</title>
+<simpara>Given a $HOME/.perfconfig like this:</simpara>
+<simpara>#
+# This is the config file, and
+# a <emphasis>#</emphasis> and <emphasis>;</emphasis> character indicates a comment
+#</simpara>
+<literallayout class="monospaced">[colors]
+        # Color variables
+        top = red, default
+        medium = green, default
+        normal = lightgray, default
+        selected = white, lightgray
+        jump_arrows = blue, default
+        addr = magenta, default
+        root = white, blue</literallayout>
+<literallayout class="monospaced">[tui]
+        # Defaults if linked with libslang
+        report = on
+        annotate = on
+        top = on</literallayout>
+<literallayout class="monospaced">[buildid]
+        # Default, disable using /dev/null
+        dir = ~/.debug</literallayout>
+<literallayout class="monospaced">[annotate]
+        # Defaults
+        hide_src_code = false
+        use_offset = true
+        jump_arrows = true
+        show_nr_jumps = false</literallayout>
+<literallayout class="monospaced">[help]
+        # Format can be man, info, web or html
+        format = man
+        autocorrect = 0</literallayout>
+<literallayout class="monospaced">[ui]
+        show-headers = true</literallayout>
+<literallayout class="monospaced">[call-graph]
+        # fp (framepointer), dwarf
+        record-mode = fp
+        print-type = graph
+        order = caller
+        sort-key = function</literallayout>
+</refsect2>
+<refsect2 id="_variables">
+<title>Variables</title>
+<variablelist>
+<varlistentry>
+<term>
+colors.*
+</term>
+<listitem>
+<simpara>
+        The variables for customizing the colors used in the output for the
+        <emphasis>report</emphasis>, <emphasis>top</emphasis> and <emphasis>annotate</emphasis> in the TUI. They should specify the
+        foreground and background colors, separated by a comma, for example:
+</simpara>
+<literallayout class="monospaced">medium = green, lightgray</literallayout>
+<literallayout class="monospaced">If you want to use the color configured for you terminal, just leave it
+as 'default', for example:</literallayout>
+<literallayout class="monospaced">medium = default, lightgray</literallayout>
+<literallayout class="monospaced">Available colors:
+red, yellow, green, cyan, gray, black, blue,
+white, default, magenta, lightgray</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+colors.top
+</term>
+<listitem>
+<simpara>
+                <emphasis>top</emphasis> means a overhead percentage which is more than 5%.
+                And values of this variable specify percentage colors.
+                Basic key values are foreground-color <emphasis>red</emphasis> and
+                background-color <emphasis>default</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+colors.medium
+</term>
+<listitem>
+<simpara>
+                <emphasis>medium</emphasis> means a overhead percentage which has more than 0.5%.
+                Default values are <emphasis>green</emphasis> and <emphasis>default</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+colors.normal
+</term>
+<listitem>
+<simpara>
+                <emphasis>normal</emphasis> means the rest of overhead percentages
+                except <emphasis>top</emphasis>, <emphasis>medium</emphasis>, <emphasis>selected</emphasis>.
+                Default values are <emphasis>lightgray</emphasis> and <emphasis>default</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+colors.selected
+</term>
+<listitem>
+<simpara>
+                This selects the colors for the current entry in a list of entries
+                from sub-commands (top, report, annotate).
+                Default values are <emphasis>black</emphasis> and <emphasis>lightgray</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+colors.jump_arrows
+</term>
+<listitem>
+<simpara>
+                Colors for jump arrows on assembly code listings
+                such as <emphasis>jns</emphasis>, <emphasis>jmp</emphasis>, <emphasis>jane</emphasis>, etc.
+                Default values are <emphasis>blue</emphasis>, <emphasis>default</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+colors.addr
+</term>
+<listitem>
+<simpara>
+                This selects colors for addresses from <emphasis>annotate</emphasis>.
+                Default values are <emphasis>magenta</emphasis>, <emphasis>default</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+colors.root
+</term>
+<listitem>
+<simpara>
+                Colors for headers in the output of a sub-commands (top, report).
+                Default values are <emphasis>white</emphasis>, <emphasis>blue</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+tui.<emphasis role="strong">, gtk.</emphasis>
+</term>
+<listitem>
+<simpara>
+        Subcommands that can be configured here are <emphasis>top</emphasis>, <emphasis>report</emphasis> and <emphasis>annotate</emphasis>.
+        These values are booleans, for example:
+</simpara>
+<literallayout class="monospaced">[tui]
+        top = true</literallayout>
+<literallayout class="monospaced">will make the TUI be the default for the 'top' subcommand. Those will be
+available if the required libs were detected at tool build time.</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+buildid.*
+</term>
+<term>
+buildid.dir
+</term>
+<listitem>
+<simpara>
+                Each executable and shared library in modern distributions comes with a
+                content based identifier that, if available, will be inserted in a
+                <emphasis>perf.data</emphasis> file header to, at analysis time find what is needed to do
+                symbol resolution, code annotation, etc.
+</simpara>
+<literallayout class="monospaced">The recording tools also stores a hard link or copy in a per-user
+directory, $HOME/.debug/, of binaries, shared libraries, /proc/kallsyms
+and /proc/kcore files to be used at analysis time.</literallayout>
+<literallayout class="monospaced">The buildid.dir variable can be used to either change this directory
+cache location, or to disable it altogether. If you want to disable it,
+set buildid.dir to /dev/null. The default is $HOME/.debug</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+annotate.*
+</term>
+<listitem>
+<simpara>
+        These options work only for TUI.
+        These are in control of addresses, jump function, source code
+        in lines of assembly code from a specific program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+annotate.hide_src_code
+</term>
+<listitem>
+<simpara>
+                If a program which is analyzed has source code,
+                this option lets <emphasis>annotate</emphasis> print a list of assembly code with the source code.
+                For example, let&#8217;s see a part of a program. There&#8217;re four lines.
+                If this option is <emphasis>true</emphasis>, they can be printed
+                without source code from a program as below.
+</simpara>
+<literallayout class="monospaced">│        push   %rbp
+│        mov    %rsp,%rbp
+│        sub    $0x10,%rsp
+│        mov    (%rdi),%rdx</literallayout>
+<literallayout class="monospaced">But if this option is 'false', source code of the part
+can be also printed as below. Default is 'false'.</literallayout>
+<literallayout class="monospaced">│      struct rb_node *rb_next(const struct rb_node *node)
+│      {
+│        push   %rbp
+│        mov    %rsp,%rbp
+│        sub    $0x10,%rsp
+│              struct rb_node *parent;
+│
+│              if (RB_EMPTY_NODE(node))
+│        mov    (%rdi),%rdx
+│              return n;</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+annotate.use_offset
+</term>
+<listitem>
+<simpara>
+                Basing on a first address of a loaded function, offset can be used.
+                Instead of using original addresses of assembly code,
+                addresses subtracted from a base address can be printed.
+                Let&#8217;s illustrate an example.
+                If a base address is 0XFFFFFFFF81624d50 as below,
+</simpara>
+<literallayout class="monospaced">ffffffff81624d50 &lt;load0&gt;</literallayout>
+<literallayout class="monospaced">an address on assembly code has a specific absolute address as below</literallayout>
+<literallayout class="monospaced">ffffffff816250b8:│  mov    0x8(%r14),%rdi</literallayout>
+<literallayout class="monospaced">but if use_offset is 'true', an address subtracted from a base address is printed.
+Default is true. This option is only applied to TUI.</literallayout>
+<literallayout class="monospaced">368:│  mov    0x8(%r14),%rdi</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+annotate.jump_arrows
+</term>
+<listitem>
+<simpara>
+                There can be jump instruction among assembly code.
+                Depending on a boolean value of jump_arrows,
+                arrows can be printed or not which represent
+                where do the instruction jump into as below.
+</simpara>
+<literallayout class="monospaced">│     ┌──jmp    1333
+│     │  xchg   %ax,%ax
+│1330:│  mov    %r15,%r10
+│1333:└─→cmp    %r15,%r14</literallayout>
+<literallayout class="monospaced">If jump_arrow is 'false', the arrows isn't printed as below.
+Default is 'false'.</literallayout>
+<literallayout class="monospaced">│      ↓ jmp    1333
+│        xchg   %ax,%ax
+│1330:   mov    %r15,%r10
+│1333:   cmp    %r15,%r14</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+annotate.show_linenr
+</term>
+<listitem>
+<simpara>
+                When showing source code if this option is <emphasis>true</emphasis>,
+                line numbers are printed as below.
+</simpara>
+<literallayout class="monospaced">│1628         if (type &amp; PERF_SAMPLE_IDENTIFIER) {
+│     ↓ jne    508
+│1628                 data-&gt;id = *array;
+│1629                 array++;
+│1630         }</literallayout>
+<literallayout class="monospaced">However if this option is 'false', they aren't printed as below.
+Default is 'false'.</literallayout>
+<literallayout class="monospaced">│             if (type &amp; PERF_SAMPLE_IDENTIFIER) {
+│     ↓ jne    508
+│                     data-&gt;id = *array;
+│                     array++;
+│             }</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+annotate.show_nr_jumps
+</term>
+<listitem>
+<simpara>
+                Let&#8217;s see a part of assembly code.
+</simpara>
+<literallayout class="monospaced">│1382:   movb   $0x1,-0x270(%rbp)</literallayout>
+<literallayout class="monospaced">If use this, the number of branches jumping to that address can be printed as below.
+Default is 'false'.</literallayout>
+<literallayout class="monospaced">│1 1382:   movb   $0x1,-0x270(%rbp)</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+annotate.show_total_period
+</term>
+<listitem>
+<simpara>
+                To compare two records on an instruction base, with this option
+                provided, display total number of samples that belong to a line
+                in assembly code. If this option is <emphasis>true</emphasis>, total periods are printed
+                instead of percent values as below.
+</simpara>
+<literallayout class="monospaced">302 │      mov    %eax,%eax</literallayout>
+<literallayout class="monospaced">But if this option is 'false', percent values for overhead are printed i.e.
+Default is 'false'.</literallayout>
+<literallayout class="monospaced">99.93 │      mov    %eax,%eax</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+hist.*
+</term>
+<term>
+hist.percentage
+</term>
+<listitem>
+<simpara>
+                This option control the way to calculate overhead of filtered entries -
+                that means the value of this option is effective only if there&#8217;s a
+                filter (by comm, dso or symbol name). Suppose a following example:
+</simpara>
+<literallayout class="monospaced">Overhead  Symbols
+........  .......
+ 33.33%     foo
+ 33.33%     bar
+ 33.33%     baz</literallayout>
+<literallayout class="monospaced">This is an original overhead and we'll filter out the first 'foo'
+entry. The value of 'relative' would increase the overhead of 'bar'
+and 'baz' to 50.00% for each, while 'absolute' would show their
+current overhead (33.33%).</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+ui.*
+</term>
+<term>
+ui.show-headers
+</term>
+<listitem>
+<simpara>
+                This option controls display of column headers (like <emphasis>Overhead</emphasis> and <emphasis>Symbol</emphasis>)
+                in <emphasis>report</emphasis> and <emphasis>top</emphasis>. If this option is false, they are hidden.
+                This option is only applied to TUI.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+call-graph.*
+</term>
+<listitem>
+<simpara>
+        When sub-commands <emphasis>top</emphasis> and <emphasis>report</emphasis> work with -g/—-children
+        there&#8217;re options in control of call-graph.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+call-graph.record-mode
+</term>
+<listitem>
+<simpara>
+                The record-mode can be <emphasis>fp</emphasis> (frame pointer), <emphasis>dwarf</emphasis> and <emphasis>lbr</emphasis>.
+                The value of <emphasis>dwarf</emphasis> is effective only if perf detect needed library
+                (libunwind or a recent version of libdw).
+                <emphasis>lbr</emphasis> only work for cpus that support it.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+call-graph.dump-size
+</term>
+<listitem>
+<simpara>
+                The size of stack to dump in order to do post-unwinding. Default is 8192 (byte).
+                When using dwarf into record-mode, the default size will be used if omitted.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+call-graph.print-type
+</term>
+<listitem>
+<simpara>
+                The print-types can be graph (graph absolute), fractal (graph relative),
+                flat and folded. This option controls a way to show overhead for each callchain
+                entry. Suppose a following example.
+</simpara>
+<literallayout class="monospaced">Overhead  Symbols
+........  .......
+  40.00%  foo
+          |
+          ---foo
+             |
+             |--50.00%--bar
+             |          main
+             |
+              --50.00%--baz
+                        main</literallayout>
+<literallayout class="monospaced">This output is a 'fractal' format. The 'foo' came from 'bar' and 'baz' exactly
+half and half so 'fractal' shows 50.00% for each
+(meaning that it assumes 100% total overhead of 'foo').</literallayout>
+<literallayout class="monospaced">The 'graph' uses absolute overhead value of 'foo' as total so each of
+'bar' and 'baz' callchain will have 20.00% of overhead.
+If 'flat' is used, single column and linear exposure of call chains.
+'folded' mean call chains are displayed in a line, separated by semicolons.</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+call-graph.order
+</term>
+<listitem>
+<simpara>
+                This option controls print order of callchains. The default is
+                <emphasis>callee</emphasis> which means callee is printed at top and then followed by its
+                caller and so on. The <emphasis>caller</emphasis> prints it in reverse order.
+</simpara>
+<literallayout class="monospaced">If this option is not set and report.children or top.children is
+set to true (or the equivalent command line option is given),
+the default value of this option is changed to 'caller' for the
+execution of 'perf report' or 'perf top'. Other commands will
+still default to 'callee'.</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+call-graph.sort-key
+</term>
+<listitem>
+<simpara>
+                The callchains are merged if they contain same information.
+                The sort-key option determines a way to compare the callchains.
+                A value of <emphasis>sort-key</emphasis> can be <emphasis>function</emphasis> or <emphasis>address</emphasis>.
+                The default is <emphasis>function</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+call-graph.threshold
+</term>
+<listitem>
+<simpara>
+                When there&#8217;re many callchains it&#8217;d print tons of lines. So perf omits
+                small callchains under a certain overhead (threshold) and this option
+                control the threshold. Default is 0.5 (%). The overhead is calculated
+                by value depends on call-graph.print-type.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+call-graph.print-limit
+</term>
+<listitem>
+<simpara>
+                This is a maximum number of lines of callchain printed for a single
+                histogram entry. Default is 0 which means no limitation.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+report.*
+</term>
+<term>
+report.percent-limit
+</term>
+<listitem>
+<simpara>
+                This one is mostly the same as call-graph.threshold but works for
+                histogram entries. Entries having an overhead lower than this
+                percentage will not be printed. Default is <emphasis>0</emphasis>. If percent-limit
+                is <emphasis>10</emphasis>, only entries which have more than 10% of overhead will be
+                printed.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+report.queue-size
+</term>
+<listitem>
+<simpara>
+                This option sets up the maximum allocation size of the internal
+                event queue for ordering events. Default is 0, meaning no limit.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+report.children
+</term>
+<listitem>
+<simpara>
+                <emphasis>Children</emphasis> means functions called from another function.
+                If this option is true, <emphasis>perf report</emphasis> cumulates callchains of children
+                and show (accumulated) total overhead as well as <emphasis>Self</emphasis> overhead.
+                Please refer to the <emphasis>perf report</emphasis> manual. The default is <emphasis>true</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+report.group
+</term>
+<listitem>
+<simpara>
+                This option is to show event group information together.
+                Example output with this turned on, notice that there is one column
+                per event in the group, ref-cycles and cycles:
+</simpara>
+<literallayout class="monospaced"># group: {ref-cycles,cycles}
+# ========
+#
+# Samples: 7K of event 'anon group { ref-cycles, cycles }'
+# Event count (approx.): 6876107743
+#
+#         Overhead  Command      Shared Object               Symbol
+# ................  .......  .................  ...................
+#
+    99.84%  99.76%  noploop  noploop            [.] main
+     0.07%   0.00%  noploop  ld-2.15.so         [.] strcmp
+     0.03%   0.00%  noploop  [kernel.kallsyms]  [k] timerqueue_del</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+top.*
+</term>
+<term>
+top.children
+</term>
+<listitem>
+<simpara>
+                Same as <emphasis>report.children</emphasis>. So if it is enabled, the output of <emphasis>top</emphasis>
+                command will have <emphasis>Children</emphasis> overhead column as well as <emphasis>Self</emphasis> overhead
+                column by default.
+                The default is <emphasis>true</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+man.*
+</term>
+<term>
+man.viewer
+</term>
+<listitem>
+<simpara>
+                This option can assign a tool to view manual pages when <emphasis>help</emphasis>
+                subcommand was invoked. Supported tools are <emphasis>man</emphasis>, <emphasis>woman</emphasis>
+                (with emacs client) and <emphasis>konqueror</emphasis>. Default is <emphasis>man</emphasis>.
+</simpara>
+<literallayout class="monospaced">New man viewer tool can be also added using 'man.&lt;tool&gt;.cmd'
+or use different path using 'man.&lt;tool&gt;.path' config option.</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+pager.*
+</term>
+<term>
+pager.&lt;subcommand&gt;
+</term>
+<listitem>
+<simpara>
+                When the subcommand is run on stdio, determine whether it uses
+                pager or not based on this value. Default is <emphasis>unspecified</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+kmem.*
+</term>
+<term>
+kmem.default
+</term>
+<listitem>
+<simpara>
+                This option decides which allocator is to be analyzed if neither
+                <emphasis>--slab</emphasis> nor <emphasis>--page</emphasis> option is used. Default is <emphasis>slab</emphasis>.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+record.*
+</term>
+<term>
+record.build-id
+</term>
+<listitem>
+<simpara>
+                This option can be <emphasis>cache</emphasis>, <emphasis>no-cache</emphasis> or <emphasis>skip</emphasis>.
+                <emphasis>cache</emphasis> is to post-process data and save/update the binaries into
+                the build-id cache (in ~/.debug). This is the default.
+                But if this option is <emphasis>no-cache</emphasis>, it will not update the build-id cache.
+                <emphasis>skip</emphasis> skips post-processing and does not update the cache.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

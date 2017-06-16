@@ -1,0 +1,32 @@
+ARCH=x86
+CONFIG_X86=y
+CONFIG_X86_64=y
+CONFIG_PERF_REGS=y
+CONFIG_LIBELF=y
+CONFIG_DWARF=y
+CONFIG_JITDUMP=y
+CONFIG_LIBDW_DWARF_UNWIND=y
+CONFIG_DWARF_UNWIND=y
+CONFIG_AUDIT=y
+CONFIG_SLANG=y
+CONFIG_LIBPERL=y
+CONFIG_LIBPYTHON=y
+CONFIG_ZLIB=y
+CONFIG_LZMA=y
+CONFIG_NUMA=y
+CONFIG_AUXTRACE=y
+bindir_SQ=/usr/bin
+PYTHON_WORD='/usr/bin/python2'
+htmldir_SQ=share/doc/perf-doc
+infodir_SQ=share/info
+mandir_SQ=share/man
+ETC_PERFCONFIG_SQ=/etc/perfconfig
+STRACE_GROUPS_DIR_SQ=share/perf-core/strace/groups
+prefix_SQ=/usr
+perfexecdir_SQ=libexec/perf-core
+tipdir_SQ=share/doc/perf-tip
+srcdir_SQ=/home/cnb/rpmbuild/BUILD/kernel-3.10.0-514.21.1.el7/linux-3.10.0-514.21.1.el7.x86_64/tools/perf
+LIBDIR=
+GTK_CFLAGS=
+PERL_EMBED_CCOPTS= -D_REENTRANT -D_GNU_SOURCE -fno-strict-aliasing -pipe -fstack-protector -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64  -I/usr/lib64/perl5/CORE 
+PYTHON_EMBED_CCOPTS=-I/usr/include/python2.7 -I/usr/include/python2.7 -fno-strict-aliasing -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv -DNDEBUG -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv

@@ -1,0 +1,4 @@
+test-gtk2-infobar.c:2:21: fatal error: gtk/gtk.h: No such file or directory
+ #include <gtk/gtk.h>
+                     ^
+compilation terminated.

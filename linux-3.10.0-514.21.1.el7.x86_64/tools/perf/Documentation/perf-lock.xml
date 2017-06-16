@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-lock</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-lock</refname>
+  <refpurpose>Analyze lock events</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf lock</emphasis> {record|report|script|info}</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>You can analyze various lock behaviours
+and statistics with this <emphasis>perf lock</emphasis> command.</simpara>
+<literallayout class="monospaced">'perf lock record &lt;command&gt;' records lock events
+between start and end &lt;command&gt;. And this command
+produces the file "perf.data" which contains tracing
+results of lock events.</literallayout>
+<literallayout class="monospaced">'perf lock report' reports statistical data.</literallayout>
+<literallayout class="monospaced">'perf lock script' shows raw lock events.</literallayout>
+<literallayout class="monospaced">'perf lock info' shows metadata like threads or addresses
+of lock instances.</literallayout>
+</refsect1>
+<refsect1 id="_common_options">
+<title>COMMON OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-i
+</term>
+<term>
+--input=&lt;file&gt;
+</term>
+<listitem>
+<simpara>
+        Input file name. (default: perf.data unless stdin is a fifo)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose (show symbol address, etc).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-D
+</term>
+<term>
+--dump-raw-trace
+</term>
+<listitem>
+<simpara>
+        Dump raw trace in ASCII.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_report_options">
+<title>REPORT OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-k
+</term>
+<term>
+--key=&lt;value&gt;
+</term>
+<listitem>
+<simpara>
+        Sorting key. Possible values: acquired (default), contended,
+        avg_wait, wait_total, wait_max, wait_min.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_info_options">
+<title>INFO OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-t
+</term>
+<term>
+--threads
+</term>
+<listitem>
+<simpara>
+        dump thread list in perf.data
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-m
+</term>
+<term>
+--map
+</term>
+<listitem>
+<simpara>
+        dump map of lock instances (address:name table)
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

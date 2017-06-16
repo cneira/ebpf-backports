@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-buildid-cache</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-buildid-cache</refname>
+  <refpurpose>Manage build-id cache.</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf buildid-cache &lt;options&gt;</emphasis></literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>This command manages the build-id cache. It can add, remove, update and purge
+files to/from the cache. In the future it should as well set upper limits for
+the space used by the cache, etc.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-a
+</term>
+<term>
+--add=
+</term>
+<listitem>
+<simpara>
+        Add specified file to the cache.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-k
+</term>
+<term>
+--kcore
+</term>
+<listitem>
+<simpara>
+        Add specified kcore file to the cache. For the current host that is
+        /proc/kcore which requires root permissions to read. Be aware that
+        running <emphasis>perf buildid-cache</emphasis> as root may update root&#8217;s build-id cache
+        not the user&#8217;s. Use the -v option to see where the file is created.
+        Note that the copied file contains only code sections not the whole core
+        image. Note also that files "kallsyms" and "modules" must also be in the
+        same directory and are also copied.  All 3 files are created with read
+        permissions for root only. kcore will not be added if there is already a
+        kcore in the cache (with the same build-id) that has the same modules at
+        the same addresses. Use the -v option to see if a copy of kcore is
+        actually made.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-r
+</term>
+<term>
+--remove=
+</term>
+<listitem>
+<simpara>
+        Remove a cached binary which has same build-id of specified file
+        from the cache.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-p
+</term>
+<term>
+--purge=
+</term>
+<listitem>
+<simpara>
+        Purge all cached binaries including older caches which have specified
+        path from the cache.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-M
+</term>
+<term>
+--missing=
+</term>
+<listitem>
+<simpara>
+        List missing build ids in the cache for the specified file.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-u
+</term>
+<term>
+--update=
+</term>
+<listitem>
+<simpara>
+        Update specified file of the cache. Note that this doesn&#8217;t remove
+        older entires since those may be still needed for annotating old
+        (or remote) perf.data. Only if there is already a cache which has
+        exactly same build-id, that is replaced by new one. It can be used
+        to update kallsyms and kernel dso to vmlinux in order to support
+        annotation.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-report</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-buildid-list</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

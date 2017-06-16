@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf</refname>
+  <refpurpose>Performance analysis tools for Linux</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf</emphasis> [--version] [--help] [OPTIONS] COMMAND [ARGS]</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+--debug
+</term>
+<listitem>
+<simpara>
+        Setup debug variable (see list below) in value
+        range (0, 10). Use like:
+          --debug verbose   # sets verbose = 1
+          --debug verbose=2 # sets verbose = 2
+</simpara>
+<literallayout class="monospaced">List of debug variables allowed to set:
+  verbose          - general debug messages
+  ordered-events   - ordered events object debug messages
+  data-convert     - data convert command debug messages</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--buildid-dir
+</term>
+<listitem>
+<simpara>
+        Setup buildid cache directory. It has higher priority than
+        buildid.dir config file option.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--version
+</term>
+<listitem>
+<simpara>
+  Display perf version.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-h
+</term>
+<term>
+--help
+</term>
+<listitem>
+<simpara>
+  Run perf help command.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>Performance counters for Linux are a new kernel-based subsystem
+that provide a framework for all things performance analysis. It
+covers hardware level (CPU/PMU, Performance Monitoring Unit) features
+and software features (software counters, tracepoints) as well.</simpara>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-stat</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-top</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>,
+<citerefentry>
+<refentrytitle>perf-record</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-report</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>,
+<citerefentry>
+<refentrytitle>perf-list</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-test</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-test</refname>
+  <refpurpose>Runs sanity tests.</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf test [&lt;options&gt;] [{list &lt;test-name-fragment&gt;|[&lt;test-name-fragments&gt;|&lt;test-numbers&gt;]}]</emphasis></literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>This command does assorted sanity tests, initially through linked routines but
+also will look for a directory with more tests in the form of scripts.</simpara>
+<simpara>To get a list of available tests use <emphasis>perf test list</emphasis>, specifying a test name
+fragment will show all tests that have it.</simpara>
+<simpara>To run just specific tests, inform test name fragments or the numbers obtained
+from <emphasis>perf test list</emphasis>.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+-s
+</term>
+<term>
+--skip
+</term>
+<listitem>
+<simpara>
+        Tests to skip (comma separated numeric list).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        Be more verbose.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+</refentry>

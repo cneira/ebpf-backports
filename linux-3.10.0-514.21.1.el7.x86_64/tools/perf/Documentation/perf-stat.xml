@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<refentry>
+<refmeta>
+<refentrytitle>perf-stat</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source">perf</refmiscinfo>
+<refmiscinfo class="version"></refmiscinfo>
+<refmiscinfo class="manual">perf Manual</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>perf-stat</refname>
+  <refpurpose>Run a command and gather performance counter statistics</refpurpose>
+</refnamediv>
+<refsynopsisdiv id="_synopsis">
+<blockquote>
+<literallayout><emphasis>perf stat</emphasis> [-e &lt;EVENT&gt; | --event=EVENT] [-a] &lt;command&gt;
+<emphasis>perf stat</emphasis> [-e &lt;EVENT&gt; | --event=EVENT] [-a]&#8201;&#8212;&#8201;&lt;command&gt; [&lt;options&gt;]
+<emphasis>perf stat</emphasis> [-e &lt;EVENT&gt; | --event=EVENT] [-a] record [-o file]&#8201;&#8212;&#8201;&lt;command&gt; [&lt;options&gt;]
+<emphasis>perf stat</emphasis> report [-i file]</literallayout>
+</blockquote>
+</refsynopsisdiv>
+<refsect1 id="_description">
+<title>DESCRIPTION</title>
+<simpara>This command runs a command and gathers performance counter statistics
+from it.</simpara>
+</refsect1>
+<refsect1 id="_options">
+<title>OPTIONS</title>
+<variablelist>
+<varlistentry>
+<term>
+&lt;command&gt;&#8230;
+</term>
+<listitem>
+<simpara>
+        Any command you can specify in a shell.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+record
+</term>
+<listitem>
+<simpara>
+        See STAT RECORD.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+report
+</term>
+<listitem>
+<simpara>
+        See STAT REPORT.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-e
+</term>
+<term>
+--event=
+</term>
+<listitem>
+<simpara>
+        Select the PMU event. Selection can be:
+</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+a symbolic event name (use <emphasis>perf list</emphasis> to list all events)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+a raw PMU event (eventsel+umask) in the form of rNNN where NNN is a
+          hexadecimal event descriptor.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+a symbolically formed event like <emphasis>pmu/param1=0x3,param2/</emphasis> where
+          param1 and param2 are defined as formats for the PMU in
+          /sys/bus/event_sources/devices/&lt;pmu&gt;/format/*
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+a symbolically formed event like <emphasis>pmu/config=M,config1=N,config2=K/</emphasis>
+          where M, N, K are numbers (in decimal, hex, octal format).
+          Acceptable values for each of <emphasis>config</emphasis>, <emphasis>config1</emphasis> and <emphasis>config2</emphasis>
+          parameters are defined by corresponding entries in
+          /sys/bus/event_sources/devices/&lt;pmu&gt;/format/*
+</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-i
+</term>
+<term>
+--no-inherit
+</term>
+<listitem>
+<simpara>
+        child tasks do not inherit counters
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-p
+</term>
+<term>
+--pid=&lt;pid&gt;
+</term>
+<listitem>
+<simpara>
+        stat events on existing process id (comma separated list)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-t
+</term>
+<term>
+--tid=&lt;tid&gt;
+</term>
+<listitem>
+<simpara>
+        stat events on existing thread id (comma separated list)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-a
+</term>
+<term>
+--all-cpus
+</term>
+<listitem>
+<simpara>
+        system-wide collection from all CPUs
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-c
+</term>
+<term>
+--scale
+</term>
+<listitem>
+<simpara>
+        scale/normalize counter values
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-d
+</term>
+<term>
+--detailed
+</term>
+<listitem>
+<simpara>
+        print more detailed statistics, can be specified up to 3 times
+</simpara>
+<literallayout class="monospaced">      -d:          detailed events, L1 and LLC data cache
+   -d -d:     more detailed events, dTLB and iTLB events
+-d -d -d:     very detailed events, adding prefetch events</literallayout>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-r
+</term>
+<term>
+--repeat=&lt;n&gt;
+</term>
+<listitem>
+<simpara>
+        repeat command and print average + stddev (max: 100). 0 means forever.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-B
+</term>
+<term>
+--big-num
+</term>
+<listitem>
+<simpara>
+        print large numbers with thousands' separators according to locale
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-C
+</term>
+<term>
+--cpu=
+</term>
+<listitem>
+<simpara>
+Count only on the list of CPUs provided. Multiple CPUs can be provided as a
+comma-separated list with no space: 0,1. Ranges of CPUs are specified with -: 0-2.
+In per-thread mode, this option is ignored. The -a option is still necessary
+to activate system-wide monitoring. Default is to count on all CPUs.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-A
+</term>
+<term>
+--no-aggr
+</term>
+<listitem>
+<simpara>
+Do not aggregate counts across all monitored CPUs in system-wide mode (-a).
+This option is only valid in system-wide mode.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-n
+</term>
+<term>
+--null
+</term>
+<listitem>
+<simpara>
+        null run - don&#8217;t start any counters
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-v
+</term>
+<term>
+--verbose
+</term>
+<listitem>
+<simpara>
+        be more verbose (show counter open errors, etc)
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-x SEP
+</term>
+<term>
+--field-separator SEP
+</term>
+<listitem>
+<simpara>
+print counts using a CSV-style output to make it easy to import directly into
+spreadsheets. Columns are separated by the string specified in SEP.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-G name
+</term>
+<term>
+--cgroup name
+</term>
+<listitem>
+<simpara>
+monitor only in the container (cgroup) called "name". This option is available only
+in per-cpu mode. The cgroup filesystem must be mounted. All threads belonging to
+container "name" are monitored when they run on the monitored CPUs. Multiple cgroups
+can be provided. Each cgroup is applied to the corresponding event, i.e., first cgroup
+to first event, second cgroup to second event and so on. It is possible to provide
+an empty cgroup (monitor all the time) using, e.g., -G foo,,bar. Cgroups must have
+corresponding events, i.e., they always refer to events defined earlier on the command
+line.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-o file
+</term>
+<term>
+--output file
+</term>
+<listitem>
+<simpara>
+Print the output into the designated file.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--append
+</term>
+<listitem>
+<simpara>
+Append to the output file designated with the -o option. Ignored if -o is not specified.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--log-fd
+</term>
+<listitem>
+<simpara>
+Log output to fd, instead of stderr.  Complementary to --output, and mutually exclusive
+with it.  --append may be used here.  Examples:
+     3&gt;results  perf stat --log-fd 3         &#8201;&#8212;&#8201;$cmd
+     3&gt;&gt;results perf stat --log-fd 3 --append&#8201;&#8212;&#8201;$cmd
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--pre
+</term>
+<term>
+--post
+</term>
+<listitem>
+<simpara>
+        Pre and post measurement hooks, e.g.:
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+<simpara>perf stat --repeat 10 --null --sync --pre <emphasis>make -s O=defconfig-build/clean</emphasis>&#8201;&#8212;&#8201;make -s -j64 O=defconfig-build/ bzImage</simpara>
+<variablelist>
+<varlistentry>
+<term>
+-I msecs
+</term>
+<term>
+--interval-print msecs
+</term>
+<listitem>
+<simpara>
+Print count deltas every N milliseconds (minimum: 10ms)
+The overhead percentage could be high in some cases, for instance with small, sub 100ms intervals.  Use with caution.
+        example: <emphasis>perf stat -I 1000 -e cycles -a sleep 5</emphasis>
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--metric-only
+</term>
+<listitem>
+<simpara>
+Only print computed metrics. Print them in a single line.
+Don&#8217;t show any raw values. Not supported with --per-thread.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--per-socket
+</term>
+<listitem>
+<simpara>
+Aggregate counts per processor socket for system-wide mode measurements.  This
+is a useful mode to detect imbalance between sockets.  To enable this mode,
+use --per-socket in addition to -a. (system-wide).  The output includes the
+socket number and the number of online processors on that socket. This is
+useful to gauge the amount of aggregation.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--per-core
+</term>
+<listitem>
+<simpara>
+Aggregate counts per physical processor for system-wide mode measurements.  This
+is a useful mode to detect imbalance between physical cores.  To enable this mode,
+use --per-core in addition to -a. (system-wide).  The output includes the
+core number and the number of online logical processors on that physical processor.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--per-thread
+</term>
+<listitem>
+<simpara>
+Aggregate counts per monitored threads, when monitoring threads (-t option)
+or processes (-p option).
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-D msecs
+</term>
+<term>
+--delay msecs
+</term>
+<listitem>
+<simpara>
+After starting the program, wait msecs before measuring. This is useful to
+filter out the startup phase of the program, which is often very different.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-T
+</term>
+<term>
+--transaction
+</term>
+<listitem>
+<simpara>
+Print statistics of transactional execution if supported.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_stat_record">
+<title>STAT RECORD</title>
+<simpara>Stores stat data into perf data file.</simpara>
+<variablelist>
+<varlistentry>
+<term>
+-o file
+</term>
+<term>
+--output file
+</term>
+<listitem>
+<simpara>
+Output file name.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_stat_report">
+<title>STAT REPORT</title>
+<simpara>Reads and reports stat data from perf data file.</simpara>
+<variablelist>
+<varlistentry>
+<term>
+-i file
+</term>
+<term>
+--input file
+</term>
+<listitem>
+<simpara>
+Input file name.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--per-socket
+</term>
+<listitem>
+<simpara>
+Aggregate counts per processor socket for system-wide mode measurements.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+--per-core
+</term>
+<listitem>
+<simpara>
+Aggregate counts per physical processor for system-wide mode measurements.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+-A
+</term>
+<term>
+--no-aggr
+</term>
+<listitem>
+<simpara>
+Do not aggregate counts across all monitored CPUs.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+<refsect1 id="_examples">
+<title>EXAMPLES</title>
+<simpara>$ perf stat&#8201;&#8212;&#8201;make -j</simpara>
+<literallayout class="monospaced">Performance counter stats for 'make -j':</literallayout>
+<literallayout class="monospaced">8117.370256  task clock ticks     #      11.281 CPU utilization factor
+        678  context switches     #       0.000 M/sec
+        133  CPU migrations       #       0.000 M/sec
+     235724  pagefaults           #       0.029 M/sec
+24821162526  CPU cycles           #    3057.784 M/sec
+18687303457  instructions         #    2302.138 M/sec
+  172158895  cache references     #      21.209 M/sec
+   27075259  cache misses         #       3.335 M/sec</literallayout>
+<literallayout class="monospaced">Wall-clock time elapsed:   719.554352 msecs</literallayout>
+</refsect1>
+<refsect1 id="_csv_format">
+<title>CSV FORMAT</title>
+<simpara>With -x, perf stat is able to output a not-quite-CSV format output
+Commas in the output are not put into "". To make it easy to parse
+it is recommended to use a different character like -x \;</simpara>
+<simpara>The fields are in this order:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+optional usec time stamp in fractions of second (with -I xxx)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+optional CPU, core, or socket identifier
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+optional number of logical CPUs aggregated
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+counter value
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+unit of the counter value or empty
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+event name
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+run time of counter
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+percentage of measurement time the counter was running
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+optional variance if multiple values are collected with -r
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+optional metric value
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+optional unit of metric
+</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Additional metrics may be printed with all earlier fields being empty.</simpara>
+</refsect1>
+<refsect1 id="_see_also">
+<title>SEE ALSO</title>
+<simpara><citerefentry>
+<refentrytitle>perf-top</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>, <citerefentry>
+<refentrytitle>perf-list</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry></simpara>
+</refsect1>
+</refentry>
