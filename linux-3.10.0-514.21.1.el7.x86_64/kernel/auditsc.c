@@ -1439,7 +1439,7 @@ void __audit_syscall_entry(int major, unsigned long a1, unsigned long a2,
 	if (!audit_enabled)
 		return;
 
-	context->arch	    = syscall_get_arch();
+	context->arch	    = syscall_get_arch(tsk,NULL);
 	context->major      = major;
 	context->argv[0]    = a1;
 	context->argv[1]    = a2;
@@ -2352,8 +2352,8 @@ void __audit_seccomp(unsigned long syscall, long signr, int code)
 	if (unlikely(!ab))
 		return;
 	audit_log_task(ab);
-	audit_log_format(ab, " sig=%ld arch=%x syscall=%ld compat=%d ip=0x%lx code=0x%x",
-			 signr, syscall_get_arch(), syscall, is_compat_task(),
+	audit_log_format(ab, " sig=%ld  syscall=%ld compat=%d ip=0x%lx code=0x%x",
+			 signr, syscall, is_compat_task(),
 			 KSTK_EIP(current), code);
 	audit_log_end(ab);
 }
