@@ -757,6 +757,19 @@ static void jit_free_defer(struct work_struct *arg)
 /* run from softirq, we must use a work_struct to call
  * module_free() from process context
  */
+
+static void bpf_jit_free_deferred(struct work_struct *work)
+{
+	struct sk_filter *fp = container_of(work, struct sk_filter, work);
+	unsigned long addr = (unsigned long)fp->bpf_func & PAGE_MASK;
+	struct bpf_binary_header *header = (void *)addr;
+
+	set_memory_rw(addr, header->pages);
+	module_free(NULL, header);
+	kfree(fp);
+}
+
+
 void bpf_jit_free(struct sk_filter *fp)
 {
 
