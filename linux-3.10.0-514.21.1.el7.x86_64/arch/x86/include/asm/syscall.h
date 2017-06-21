@@ -233,7 +233,7 @@ static inline int syscall_get_arch(void)
 	 *
 	 * x32 tasks should be considered AUDIT_ARCH_X86_64.
 	 */
-	if (task_thread_info(task)->status & TS_COMPAT)
+  if (task_thread_info(current)->status & TS_COMPAT) 
 		return AUDIT_ARCH_I386;
 #endif
 	/* Both x32 and x86_64 are considered "64-bit". */
