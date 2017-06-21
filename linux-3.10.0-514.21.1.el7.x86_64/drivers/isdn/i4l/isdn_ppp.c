@@ -378,10 +378,15 @@ isdn_ppp_release(int min, struct file *file)
 	is->slcomp = NULL;
 #endif
 #ifdef CONFIG_IPPP_FILTER
-	kfree(is->pass_filter);
-	is->pass_filter = NULL;
-	kfree(is->active_filter);
-	is->active_filter = NULL;
+	if (is->pass_filter) {
+		sk_unattached_filter_destroy(is->pass_filter);
+		is->pass_filter = NULL;
+	}
+
+	if (is->active_filter) {
+		sk_unattached_filter_destroy(is->active_filter);
+		is->active_filter = NULL;
+	}
 #endif
 
 /* TODO: if this was the previous master: link the stuff to the new master */
@@ -629,8 +634,10 @@ isdn_ppp_ioctl(int min, struct file *file, unsigned int cmd, unsigned long arg)
 #ifdef CONFIG_IPPP_FILTER
 	case PPPIOCSPASS:
 	{
+		struct sock_fprog fprog;
 		struct sock_filter *code;
-		int len = get_filter(argp, &code);
+		int err, len = get_filter(argp, &code);
+
 		if (len < 0)
 			return len;
 
