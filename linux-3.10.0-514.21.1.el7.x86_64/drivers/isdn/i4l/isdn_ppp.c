@@ -633,21 +633,35 @@ isdn_ppp_ioctl(int min, struct file *file, unsigned int cmd, unsigned long arg)
 		int len = get_filter(argp, &code);
 		if (len < 0)
 			return len;
-		kfree(is->pass_filter);
-		is->pass_filter = code;
-		is->pass_len = len;
-		break;
+
+		fprog.len = len;
+		fprog.filter = code;
+
+		if (is->pass_filter)
+			sk_unattached_filter_destroy(is->pass_filter);
+		err = sk_unattached_filter_create(&is->pass_filter, &fprog);
+		kfree(code);
+
+		return err;
 	}
 	case PPPIOCSACTIVE:
 	{
+		struct sock_fprog fprog;
 		struct sock_filter *code;
-		int len = get_filter(argp, &code);
+		int err, len = get_filter(argp, &code);
+
 		if (len < 0)
 			return len;
-		kfree(is->active_filter);
-		is->active_filter = code;
-		is->active_len = len;
-		break;
+
+		fprog.len = len;
+		fprog.filter = code;
+
+		if (is->active_filter)
+			sk_unattached_filter_destroy(is->active_filter);
+		err = sk_unattached_filter_create(&is->active_filter, &fprog);
+		kfree(code);
+
+		return err;
 	}
 #endif /* CONFIG_IPPP_FILTER */
 	default:
