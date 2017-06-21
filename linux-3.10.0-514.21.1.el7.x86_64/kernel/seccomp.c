@@ -71,7 +71,7 @@ static void populate_seccomp_data(struct seccomp_data *sd)
 	struct pt_regs *regs = task_pt_regs(task);
 
 	sd->nr = syscall_get_nr(task, regs);
-	sd->arch = syscall_get_arch(task, regs);
+	sd->arch = syscall_get_arch();
 
 	/* Unroll syscall_get_args to help gcc on arm. */
 	syscall_get_arguments(task, regs, 0, 1, (unsigned long *) &sd->args[0]);
