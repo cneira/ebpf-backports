@@ -137,4 +137,6 @@ static inline int ptp_filter_init(struct sock_filter *f, int len)
 	{OP_RETA,	0,   0, 0			}, /*              */ \
 /*L6x*/	{OP_RETK,	0,   0, PTP_CLASS_NONE		},
 
+unsigned int ptp_classify_raw(const struct sk_buff *skb);
+
 #endif
