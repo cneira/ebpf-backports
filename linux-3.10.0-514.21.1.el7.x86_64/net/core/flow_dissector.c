@@ -298,22 +298,36 @@ u16 __skb_tx_hash(const struct net_device *dev, struct sk_buff *skb,
 		qcount = dev->tc_to_txq[tc].count;
 	}
 
-	return (u16) reciprocal_scale(skb_get_hash(skb), qcount) + qoffset;
+	if (skb->sk && skb->sk->sk_hash)
+		hash = skb->sk->sk_hash;
+	else
+		hash = (__force u16) skb->protocol;
+	hash = __flow_hash_1word(hash);
+
+	return (u16) (((u64) hash * qcount) >> 32) + qoffset;
 }
 EXPORT_SYMBOL(__skb_tx_hash);
 
-u32 __skb_get_poff(const struct sk_buff *skb, void *data,
-		   const struct flow_keys *keys, int hlen)
+/* __skb_get_poff() returns the offset to the payload as far as it could
+ * be dissected. The main user is currently BPF, so that we can dynamically
+ * truncate packets without needing to push actual payload to the user
+ * space and can analyze headers only, instead.
+ */
+u32 __skb_get_poff(const struct sk_buff *skb)
 {
-	u32 poff = keys->thoff;
+	struct flow_keys keys;
+	u32 poff = 0;
 
-	switch (keys->ip_proto) {
+	if (!skb_flow_dissect(skb, &keys))
+		return 0;
+
+	poff += keys.thoff;
+	switch (keys.ip_proto) {
 	case IPPROTO_TCP: {
 		const struct tcphdr *tcph;
 		struct tcphdr _tcph;
 
-		tcph = __skb_header_pointer(skb, poff, sizeof(_tcph),
-					    data, hlen, &_tcph);
+		tcph = skb_header_pointer(skb, poff, sizeof(_tcph), &_tcph);
 		if (!tcph)
 			return poff;
 
