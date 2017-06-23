@@ -254,18 +254,6 @@ u32 flow_hash_from_keys(struct flow_keys *keys)
 }
 EXPORT_SYMBOL(flow_hash_from_keys);
 
-static u32 hashrnd __read_mostly;
-static __always_inline void __flow_hash_secret_init(void)
-{
-	net_get_random_once(&hashrnd, sizeof(hashrnd));
-}
-
-static __always_inline u32 __flow_hash_3words(u32 a, u32 b, u32 c)
-{
-	__flow_hash_secret_init();
-	return jhash_3words(a, b, c, hashrnd);
-}
-
 static __always_inline u32 __flow_hash_1word(u32 a)
 {
 	__flow_hash_secret_init();
