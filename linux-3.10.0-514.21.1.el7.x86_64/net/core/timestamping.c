@@ -23,16 +23,20 @@
 #include <linux/skbuff.h>
 #include <linux/export.h>
 
-static struct sock_filter ptp_filter[] = {
-	PTP_FILTER
-};
+static struct sk_filter *ptp_insns __read_mostly;
+
+unsigned int ptp_classify_raw(const struct sk_buff *skb)
+{
+	return SK_RUN_FILTER(ptp_insns, skb);
+}
+EXPORT_SYMBOL_GPL(ptp_classify_raw);
 
 static unsigned int classify(const struct sk_buff *skb)
 {
 	if (likely(skb->dev &&
 		   skb->dev->phydev &&
 		   skb->dev->phydev->drv))
-		return sk_run_filter(skb, ptp_filter);
+		return ptp_classify_raw(skb);
 	else
 		return PTP_CLASS_NONE;
 }
@@ -135,5 +139,10 @@ EXPORT_SYMBOL_GPL(skb_defer_rx_timestamp);
 
 void __init skb_timestamping_init(void)
 {
-	BUG_ON(sk_chk_filter(ptp_filter, ARRAY_SIZE(ptp_filter)));
+	static struct sock_filter ptp_filter[] = { PTP_FILTER };
+	struct sock_fprog ptp_prog = {
+		.len = ARRAY_SIZE(ptp_filter), .filter = ptp_filter,
+	};
+
+	BUG_ON(sk_unattached_filter_create(&ptp_insns, &ptp_prog));
 }
