@@ -172,7 +172,7 @@ u32 eth_get_headlen(void *data, unsigned int len)
 		return max_t(u32, keys.thoff, sizeof(*eth));
 
 	/* parse for any L4 headers */
-	return min_t(u32, __skb_get_poff(NULL, data, &keys, len), len);
+	return min_t(u32, __skb_get_poff(data), len);
 }
 EXPORT_SYMBOL(eth_get_headlen);
 
