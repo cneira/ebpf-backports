@@ -44,6 +44,7 @@
 #include <linux/ratelimit.h>
 #include <linux/seccomp.h>
 #include <linux/if_vlan.h>
+#include "../../include/linux/filter.h"
 
 /* Registers */
 #define BPF_R0	regs[BPF_REG_0]
