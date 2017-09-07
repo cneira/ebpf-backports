@@ -153,18 +153,59 @@ const struct bpf_func_proto bpf_get_current_uid_gid_proto = {
 	.ret_type	= RET_INTEGER,
 };
 
-BPF_CALL_0(bpf_get_current_ns)
+BPF_CALL_0(bpf_get_current_pid_ns)
 {
+#ifdef CONFIG_PID_NS
   struct pid_namespace *current_ns = task_active_pid_ns(current);
 
 	if (unlikely(!current_ns))
 		return -EINVAL;
 
   return (long) current_ns;
+#else
+
+  return 0;
+#endif
+
 }
 
-const struct bpf_func_proto bpf_get_current_ns_proto = {
-	.func		= bpf_get_current_ns,
+const struct bpf_func_proto bpf_get_current_pid_ns_proto = {
+	.func		= bpf_get_current_pid_ns,
+	.gpl_only	= false,
+	.ret_type	= RET_INTEGER,
+};
+
+BPF_CALL_0(bpf_get_current_ns_id)
+{
+  struct task_struct *ts = current;
+
+	if (unlikely(!ts))
+		return -EINVAL;
+
+  return (unsigned int) ts->nsproxy->pid_ns_for_children->ns.inum;
+
+}
+
+const struct bpf_func_proto bpf_get_current_ns_id_proto = {
+	.func		= bpf_get_current_pid_ns,
+	.gpl_only	= false,
+	.ret_type	= RET_INTEGER,
+};
+
+BPF_CALL_0(bpf_get_current_pid_tgid_in_current_ns)
+{
+  struct task_struct *ts = current;
+
+	if (unlikely(!ts))
+		return -EINVAL;
+
+  pid_t pid =  task_pid_vnr(ts);
+
+	return (u64) ts->tgid << 32 | pid;
+}
+
+const struct bpf_func_proto bpf_get_current_pid_tgid_in_current_ns_proto = {
+	.func		= bpf_get_current_pid_tgid_in_current_ns,
 	.gpl_only	= false,
 	.ret_type	= RET_INTEGER,
 };
