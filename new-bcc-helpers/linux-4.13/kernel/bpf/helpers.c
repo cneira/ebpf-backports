@@ -187,7 +187,7 @@ BPF_CALL_0(bpf_get_current_ns_id)
 }
 
 const struct bpf_func_proto bpf_get_current_ns_id_proto = {
-	.func		= bpf_get_current_pid_ns,
+	.func		= bpf_get_current_ns_id,
 	.gpl_only	= false,
 	.ret_type	= RET_INTEGER,
 };
