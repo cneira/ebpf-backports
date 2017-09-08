@@ -591,7 +591,11 @@ union bpf_attr {
 	FN(get_socket_uid),		\
 	FN(set_hash),			\
 	FN(setsockopt),			\
-	FN(skb_adjust_room),
+	FN(skb_adjust_room),            \
+	FN(get_current_pid_ns), 	\
+	FN(get_current_ns_id),	 	\
+	FN(get_current_pid),	 	
+
 
 /* integer value in 'imm' field of BPF_CALL instruction selects which helper
  * function eBPF program intends to call
