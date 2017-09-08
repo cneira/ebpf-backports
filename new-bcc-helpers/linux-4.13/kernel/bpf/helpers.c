@@ -153,6 +153,34 @@ const struct bpf_func_proto bpf_get_current_uid_gid_proto = {
 	.ret_type	= RET_INTEGER,
 };
 
+BPF_CALL_2(bpf_get_current_comm, char *, buf, u32, size)
+{
+	struct task_struct *task = current;
+
+	if (unlikely(!task))
+		goto err_clear;
+
+	strncpy(buf, task->comm, size);
+
+	/* Verifier guarantees that size > 0. For task->comm exceeding
+	 * size, guarantee that buf is %NUL-terminated. Unconditionally
+	 * done here to save the size test.
+	 */
+	buf[size - 1] = 0;
+	return 0;
+err_clear:
+	memset(buf, 0, size);
+	return -EINVAL;
+}
+
+const struct bpf_func_proto bpf_get_current_comm_proto = {
+	.func		= bpf_get_current_comm,
+	.gpl_only	= false,
+	.ret_type	= RET_INTEGER,
+	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+	.arg2_type	= ARG_CONST_SIZE,
+};
+
 BPF_CALL_0(bpf_get_current_pid_ns)
 {
 #ifdef CONFIG_PID_NS
@@ -194,7 +222,7 @@ const struct bpf_func_proto bpf_get_current_ns_id_proto = {
 	.ret_type	= RET_INTEGER,
 };
 
-BPF_CALL_0(bpf_get_current_pid_tgid_in_current_ns)
+BPF_CALL_0(bpf_get_current_pid)
 {
 	struct task_struct *ts = current;
 
@@ -206,36 +234,10 @@ BPF_CALL_0(bpf_get_current_pid_tgid_in_current_ns)
 	return (u64) ts->tgid << 32 | pid;
 }
 
-const struct bpf_func_proto bpf_get_current_pid_tgid_in_current_ns_proto = {
-	.func		= bpf_get_current_pid_tgid_in_current_ns,
+const struct bpf_func_proto bpf_get_current_pid_proto = {
+	.func		= bpf_get_current_pid,
 	.gpl_only	= false,
 	.ret_type	= RET_INTEGER,
 };
 
-BPF_CALL_2(bpf_get_current_comm, char *, buf, u32, size)
-{
-	struct task_struct *task = current;
 
-	if (unlikely(!task))
-		goto err_clear;
-
-	strncpy(buf, task->comm, size);
-
-	/* Verifier guarantees that size > 0. For task->comm exceeding
-	 * size, guarantee that buf is %NUL-terminated. Unconditionally
-	 * done here to save the size test.
-	 */
-	buf[size - 1] = 0;
-	return 0;
-err_clear:
-	memset(buf, 0, size);
-	return -EINVAL;
-}
-
-const struct bpf_func_proto bpf_get_current_comm_proto = {
-	.func		= bpf_get_current_comm,
-	.gpl_only	= false,
-	.ret_type	= RET_INTEGER,
-	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
-	.arg2_type	= ARG_CONST_SIZE,
-};
