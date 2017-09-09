@@ -375,9 +375,9 @@ extern const struct bpf_func_proto bpf_skb_vlan_push_proto;
 extern const struct bpf_func_proto bpf_skb_vlan_pop_proto;
 extern const struct bpf_func_proto bpf_get_stackid_proto;
 
-extern const struct bpf_func_proto bpf_get_current_pid_ns;
-extern const struct bpf_func_proto bpf_get_current_ns_id;
-extern const struct bpf_func_proto bpf_get_current_pid;
+extern const struct bpf_func_proto bpf_get_current_pid_ns_proto;
+extern const struct bpf_func_proto bpf_get_current_ns_id_proto;
+extern const struct bpf_func_proto bpf_get_current_pid_proto;
 
 
 /* Shared helpers among cBPF and eBPF. */
