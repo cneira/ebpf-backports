@@ -487,6 +487,12 @@ static const struct bpf_func_proto *tracing_func_proto(enum bpf_func_id func_id)
 		return &bpf_get_prandom_u32_proto;
 	case BPF_FUNC_probe_read_str:
 		return &bpf_probe_read_str_proto;
+	case BPF_FUNC_get_current_pid:
+		return &bpf_get_current_pid_proto;
+	case BPF_FUNC_get_current_ns_id:
+		return &bpf_get_current_ns_id_proto;
+	case BPF_FUNC_get_current_pid_ns:
+		return &bpf_get_current_pid_ns_proto;
 	default:
 		return NULL;
 	}

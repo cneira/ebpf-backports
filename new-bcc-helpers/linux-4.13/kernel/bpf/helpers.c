@@ -225,11 +225,11 @@ const struct bpf_func_proto bpf_get_current_ns_id_proto = {
 BPF_CALL_0(bpf_get_current_pid)
 {
 	struct task_struct *ts = current;
-
+	pid_t pid; 
 	if (unlikely(!ts))
 		return -EINVAL;
 
-	pid_t pid = task_pid_vnr(ts);
+	pid = task_pid_vnr(ts);
 
 	return (u64) ts->tgid << 32 | pid;
 }
