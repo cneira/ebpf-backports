@@ -190,7 +190,7 @@ BPF_CALL_0(bpf_get_current_pid_ns)
 	if (unlikely(!current_ns))
 		return -EINVAL;
 
-	return (long) current_ns;
+	return (u64) current_ns;
 #else
 
 	return 0;

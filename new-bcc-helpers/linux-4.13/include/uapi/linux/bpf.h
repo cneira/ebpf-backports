@@ -539,6 +539,19 @@ union bpf_attr {
  *     @mode: operation mode (enum bpf_adj_room_mode)
  *     @flags: reserved for future use
  *     Return: 0 on success or negative error code
+ *
+ * int bpf_get_current_ns_id(void)
+ *     Return namespace id associated with current task
+ *     Return: ts->nsproxy->pid_ns_for_children->ns.inum 
+ *
+ * u64 bpf_get_current_pid_ns(void)
+ *     Return pid_namespace struct 
+ *     Return: struct pid_namespace
+ *
+ * u64 bpf_get_current_pid(void)
+ *      Returns pid of current task as seen from pid namespace
+ *	return (u64) ts->tgid << 32 | task_pid_vnr(current);
+ *
  */
 #define __BPF_FUNC_MAPPER(FN)		\
 	FN(unspec),			\
