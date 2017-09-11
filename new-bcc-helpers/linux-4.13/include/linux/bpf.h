@@ -226,6 +226,12 @@ struct bpf_event_entry {
 	struct file *map_file;
 	struct rcu_head rcu;
 };
+/* struct used by helper bpf_get_current_ns_info */
+struct bpf_current_ns_info {
+	u64 ns_id;  /*namespace id*/
+	u32 tgid;   /*tgid inside namespace*/
+	u32 gid;   /*gid inside namespace*/
+};
 
 u64 bpf_tail_call(u64 ctx, u64 r2, u64 index, u64 r4, u64 r5);
 u64 bpf_get_stackid(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
@@ -375,10 +381,8 @@ extern const struct bpf_func_proto bpf_skb_vlan_push_proto;
 extern const struct bpf_func_proto bpf_skb_vlan_pop_proto;
 extern const struct bpf_func_proto bpf_get_stackid_proto;
 
-extern const struct bpf_func_proto bpf_get_current_pid_ns_proto;
-extern const struct bpf_func_proto bpf_get_current_ns_id_proto;
-extern const struct bpf_func_proto bpf_get_current_pid_proto;
 
+extern const struct bpf_func_proto bpf_get_current_ns_info_proto;
 
 /* Shared helpers among cBPF and eBPF. */
 void bpf_user_rnd_init_once(void);

@@ -181,63 +181,49 @@ const struct bpf_func_proto bpf_get_current_comm_proto = {
 	.arg2_type	= ARG_CONST_SIZE,
 };
 
-BPF_CALL_0(bpf_get_current_pid_ns)
-{
-#ifdef CONFIG_PID_NS
-	struct pid_namespace *current_ns = 
-		task_active_pid_ns(current);
-
-	if (unlikely(!current_ns))
-		return -EINVAL;
-
-	return (u64) current_ns;
-#else
-
-	return 0;
-#endif
-
-}
-
-const struct bpf_func_proto bpf_get_current_pid_ns_proto = {
-	.func		= bpf_get_current_pid_ns,
-	.gpl_only	= false,
-	.ret_type	= RET_INTEGER,
-};
-
-BPF_CALL_0(bpf_get_current_ns_id)
+BPF_CALL_2(bpf_get_current_ns_info, void *, buf, u32, size)
 {
 	struct task_struct *ts = current;
+	struct task_struct *ns_task = NULL;
+	struct cred  *cred = NULL;
+
+        pid_t pid;
 
 	if (unlikely(!ts))
-		return -EINVAL;
+		goto err_clear;
 
-	return (unsigned int) 
+	buf->ns_id = 
 		ts->nsproxy->pid_ns_for_children->ns.inum;
 
+	pid = task_pid_nr_ns(ts,
+		ts->nsproxy->pid_ns_for_children);
+
+	ns_task = find_task_by_pid_ns(pid,
+			ts->nsproxy->pid_ns_for_children);
+
+	if (unlikely(!ns_task))
+		goto err_clear;
+
+	buf->tgid = ns_task->tgid; 
+
+	cred = get_task_cred(ns_task);
+
+	if (unlikely(!cred))
+		goto err_clear;
+
+	buf->gid =  cred->gid;
+
+	return 0;
+
+err_clear:
+	memset(buf, 0, size);
+	return -EINVAL;
 }
 
-const struct bpf_func_proto bpf_get_current_ns_id_proto = {
-	.func		= bpf_get_current_ns_id,
+const struct bpf_func_proto bpf_get_current_ns_info_proto = {
+	.func		= bpf_get_current_ns_info,
 	.gpl_only	= false,
 	.ret_type	= RET_INTEGER,
+	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+	.arg2_type	= ARG_CONST_SIZE,
 };
-
-BPF_CALL_0(bpf_get_current_pid)
-{
-	struct task_struct *ts = current;
-	pid_t pid; 
-	if (unlikely(!ts))
-		return -EINVAL;
-
-	pid = task_pid_vnr(ts);
-
-	return (u64) ts->tgid << 32 | pid;
-}
-
-const struct bpf_func_proto bpf_get_current_pid_proto = {
-	.func		= bpf_get_current_pid,
-	.gpl_only	= false,
-	.ret_type	= RET_INTEGER,
-};
-
-
