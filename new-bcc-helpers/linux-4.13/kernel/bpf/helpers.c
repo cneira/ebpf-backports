@@ -183,7 +183,8 @@ const struct bpf_func_proto bpf_get_current_comm_proto = {
 
 BPF_CALL_2(bpf_get_current_ns_info, void *, buf, u32, size)
 {
-	if (unlikely(!buf))
+
+	if (!buf)
 		return -EINVAL;
 
 	struct task_struct *ts = current;
